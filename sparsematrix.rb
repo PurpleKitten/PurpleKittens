@@ -18,12 +18,8 @@ class SparseMatrix
         end 
     end
     
-    def method_missing(method_name, *args)
-        if @delegate.respond_to?(method_name)
-            @delegate.send(method_name, *args)
-        else
-            @matrix.send(method_name, *args)
-        end
+    def delegate(method_name, *args)
+        @delegate.send(method_name, *args)
     end
 
     private
@@ -35,7 +31,7 @@ class SparseMatrix
     def self.init_matrix(delegate, method_name, *args)
         #pre-conditions
         #method name is string and args are the right number of args
-        matrix = delegate(method_name, *args)
+        matrix = self.delegate(method_name, *args)
         new delegate, matrix
         #post conditions are @matrix contains a matrix
     end

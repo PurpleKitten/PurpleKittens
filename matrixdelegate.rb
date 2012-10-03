@@ -11,8 +11,23 @@ module MatrixDelegate
 
     private 
     def initialize()
-        mat = nil
+        @matrix = nil
     end
+
+    def method_missing(method_name, *args)
+        pre_method_missing(method_name, *args)
+        class_invariant
+
+        if self.respond_to?(method_name)
+            self.call(method_name, args)
+        else
+            @matrix.call(method_name, args)
+        end    
+
+        class_invariant
+        post_method_missing(method_name, *args)
+    end
+  
 
     def [](*rows)
         pre_square_brackets(rows)

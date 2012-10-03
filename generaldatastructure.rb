@@ -20,10 +20,10 @@ class GeneralDataStructure
         
         @elements = self.create_hash(rows)
         @size = [rows.size,rows[0].size]
-        self
 
         class_invariant()
         post_init(rows)
+        self
     end
 
     def create_hash(rows)
@@ -36,10 +36,10 @@ class GeneralDataStructure
                 new_hash[[i,j]] = col unless col == 0
             end
         end
-        new_hash
 
         class_invariant()
         post_create_hash(rows, new_hash)
+        new_hash
     end
 
     def each(&block)
@@ -62,10 +62,10 @@ class GeneralDataStructure
                 end
             end
         end
-        row
 
         class_invariant()
         post_row(index, row)
+        row
     end
 
     def [](i, j)
@@ -74,13 +74,15 @@ class GeneralDataStructure
 
         #assert must be within i,j
         if @elements[[i,j]] == nil
-            0
+            el = 0
         else
-            @elements[[i, j]]
+            el = @elements[[i, j]]
         end
 
         class_invariant()
         post_square_brackets(i,j)
+
+        el
     end
 
     def []=(i, j, v)
@@ -99,10 +101,10 @@ class GeneralDataStructure
         class_invariant()
 
         array=self.to_a
-        array[index]
 
         class_invariant()
         post_fetch(index, default)
+        array[index]
     end
 
     def transpose()
@@ -110,20 +112,21 @@ class GeneralDataStructure
         class_invariant()
 
         a = self.to_a
-        a.transpose
 
         class_invariant()
         post_transpose
+        a.transpose
     end
 
     def to_s
         pre_to_s
         class_invariant()
 
-        "#{self.to_a}"
+        s = "#{self.to_a}"
 
         class_invariant()
         post_to_s
+        s
     end
 
     def hash

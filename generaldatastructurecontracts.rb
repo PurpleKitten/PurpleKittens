@@ -54,16 +54,23 @@ module GeneralDataStructureContracts
     end
 
     def pre_square_brackets(i,j)
+        assert( i.is_a?(Integer) && j.is_a?(Integer), "Indices must be integers.")
+        assert(i < @size[0] || i >= 0, "i index must be greater than 0 and less than #{@size[0]}")
+        assert(j < @size[1] || j >= 0, "j index must be greater than 0 and less than #{@size[1]}")
     end
     def post_square_brackets(i,j)
     end
 
     def pre_square_bracket_equals(i,j,v)
+        pre_square_brackets(i, j)
     end
     def post_square_bracket_equals(i,j,v)
+        post_square_brackets(i,j)
+        assert(self[i,j] == v, "Value was not properly set.")
     end
 
     def pre_fetch(index, default)
+        pre_row(index)
     end
     def post_fetch(index, default)
     end
