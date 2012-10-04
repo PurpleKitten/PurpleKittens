@@ -9,32 +9,16 @@ class SparseMatrix
     attr_accessor :delegate
     attr_accessor :matrix
     protected :matrix
-
-    def self.delegate(method_name, *args)
-        if @delegate.respond_to?(method_name)
-            @delegate.send(method_name, *args)
-        else
-            Matrix.send(method_name, *args)
-        end 
-    end
     
     def delegate(method_name, *args)
-        @delegate.send(method_name, *args)
+        return @delegate.send(method_name, *args)
     end
 
-    private
     def initialize(delegate,matrix)
         @delegate = delegate
         @matrix = matrix
     end
-
-    def self.init_matrix(delegate, method_name, *args)
-        #pre-conditions
-        #method name is string and args are the right number of args
-        matrix = self.delegate(method_name, *args)
-        new delegate, matrix
-        #post conditions are @matrix contains a matrix
-    end
+    private :initialize
 
     def to_s
         "Sparse#{@matrix}"
@@ -117,7 +101,50 @@ class SparseMatrix
         self.init_matrix(delegate, __method__, column)
         #post-conditions
     end
+      
+    def *(m)
+        #pre-conditions
+        return delegate_method(__method__, m)
+        #post-conditions
+    end
+    
+    
+    
+    def coerce(matrix)
+      delegate(__method__, matrix)
+    end
 
     #other methods here
-
+    
+    private
+  
+    def self.init_matrix(delegate, method_name, *args)
+        #pre-conditions
+        #method name is string and args are the right number of args
+        matrix = self.delegate_init(delegate, method_name, *args)
+        new delegate, matrix
+        #post conditions are @matrix contains a matrix
+    end
+  
+  
+    def delegate_method(method_name, *args) 
+      #assert - check one of them respond or raise exception?
+      
+          if @delegate.respond_to?(method_name)
+              return @delegate.send(method_name, *args)
+          else
+              return @matrix.send(method_name, *args)
+        
+      end
+    end
+    
+    def self.delegate_init(delegate, method_name, *args)  
+       
+      if delegate.respond_to?(method_name)
+            return delegate.send(method_name, *args)
+        else
+            return Matrix.send(method_name, *args)
+        end 
+  end
+    
 end

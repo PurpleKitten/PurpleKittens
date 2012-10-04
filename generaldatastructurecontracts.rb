@@ -18,7 +18,7 @@ module GeneralDataStructureContracts
         assert(self.to_a == rows, "Data created was corrupted. \
                                    Rows input were invalidly processed")
         assert(@elements != nil)
-        assert(@size == [rows.size, rows[0].size])
+        assert(@size == rows.size  && @column_size = rows[0].size)
     end
 
     def pre_create_hash(rows)
@@ -47,16 +47,16 @@ module GeneralDataStructureContracts
     end
 
     def pre_row(index)
-        assert(index < @size[0] || index >= 0, "Index out of bounds.")
+        assert(index < @size || index >= 0, "Index out of bounds.")
     end
     def post_row(index, row)
-        assert(row.size == @size[1], "Invalid row created from index.")
+        assert(row.size == @column_size, "Invalid row created from index.")
     end
 
     def pre_square_brackets(i,j)
         assert( i.is_a?(Integer) && j.is_a?(Integer), "Indices must be integers.")
-        assert(i < @size[0] || i >= 0, "i index must be greater than 0 and less than #{@size[0]}")
-        assert(j < @size[1] || j >= 0, "j index must be greater than 0 and less than #{@size[1]}")
+        assert(i < @size || i >= 0, "i index must be greater than 0 and less than #{@size}")
+        assert(j < @column_size || j >= 0, "j index must be greater than 0 and less than #{@column_size}")
     end
     def post_square_brackets(i,j)
     end

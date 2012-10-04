@@ -315,7 +315,7 @@ class Matrix
   end
 
   def new_matrix(rows, column_size = rows[0].size) # :nodoc:
-    self.send(:new, rows, column_size) # bypass privacy of Matrix.new
+    Matrix.send(:new, rows, column_size) # bypass privacy of Matrix.new
   end
   private :new_matrix
 
@@ -1394,7 +1394,7 @@ class Matrix
     #
     def apply_through_coercion(obj, oper)
       coercion = obj.coerce(self)
-      raise TypeError unless coercion.is_a?(Array) && coercion.length == 2
+      raise TypeError unless coercion.is_a?(Array) && coercion.length == 2     
       coercion[0].public_send(oper, coercion[1])
     rescue
       raise TypeError, "#{obj.inspect} can't be coerced into #{self.class}"

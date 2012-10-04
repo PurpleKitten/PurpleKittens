@@ -8,24 +8,28 @@ module MatrixDelegate
         attr_accessor :matrix
         private :matrix
     end
-
-    private 
+    
+     
     def initialize()
         @matrix = nil
     end
-
+    private:initialize
+    
     def method_missing(method_name, *args)
-        pre_method_missing(method_name, *args)
+        puts method_name
+        #pre_method_missing(delegate, method_name, *args)
         class_invariant
 
         if self.respond_to?(method_name)
-            self.call(method_name, args)
+            result = self.send(method_name, args)
         else
-            @matrix.call(method_name, args)
+            result = @matrix.send(method_name, args)
         end    
 
         class_invariant
         post_method_missing(method_name, *args)
+        
+        result
     end
   
 
@@ -33,7 +37,7 @@ module MatrixDelegate
         pre_square_brackets(rows)
         class_invariant()
 
-        mat = init_matrix(__method__, *rows)
+        mat = create_matrix(__method__, *rows)
         
         class_invariant()
         post_square_brackets(rows)
@@ -44,7 +48,7 @@ module MatrixDelegate
         pre_diagonal(values)
         class_invariant()
 
-        mat = init_matrix(__method__, *values)
+        mat = create_matrix(__method__, *values)
         
         class_invariant()
         post_diagonal(values)
@@ -55,7 +59,7 @@ module MatrixDelegate
         pre_empty(row_size, col_size)
         class_invariant()
 
-        mat = init_matrix(__method__, row_size, col_size)
+        mat = create_matrix(__method__, row_size, col_size)
         
         class_invariant()
         post_empty(row_size, col_size)
@@ -66,7 +70,7 @@ module MatrixDelegate
         pre_rows(rows, copy)
         class_invariant()
 
-        mat = init_matrix(__method__, rows, copy)
+        mat = create_matrix(__method__, rows, copy)
         
         class_invariant()
         post_rows(rows, copy)
@@ -77,7 +81,7 @@ module MatrixDelegate
         pre_columns(columns)
         class_invariant()
 
-        create_matrix(__method__, columns)
+      mat = create_matrix(__method__, columns)
         
         class_invariant()
         post_columns(columns)
@@ -88,7 +92,7 @@ module MatrixDelegate
         pre_build(rowSize, columnSize)
         class_invariant()
 
-        create_matrix(__method__, rowSize, columnSize)
+        mat = create_matrix(__method__, rowSize, columnSize)
         
         class_invariant()
         post_build(rowSize, columnSize)
@@ -99,7 +103,7 @@ module MatrixDelegate
         pre_scalar(n, value)
         class_invariant()
 
-        create_matrix(__method__, n, value)
+        mat = create_matrix(__method__, n, value)
         
         class_invariant()
         post_scalar(n, value)
@@ -110,7 +114,7 @@ module MatrixDelegate
         pre_identity(n)
         class_invariant()
 
-        create_matrix(__method__, n)
+        mat = create_matrix(__method__, n)
         
         class_invariant()
         post_identity(n)
@@ -121,7 +125,7 @@ module MatrixDelegate
         pre_unit(n)
         class_invariant()
 
-        create_matrix(__method__, n)
+        mat = create_matrix(__method__, n)
         
         class_invariant()
         post_unit(n)
@@ -132,7 +136,7 @@ module MatrixDelegate
         pre_I(n)
         class_invariant()
 
-        create_matrix(__method__, n)
+        mat = create_matrix(__method__, n)
         
         class_invariant()
         post_I(n)
@@ -143,7 +147,7 @@ module MatrixDelegate
         pre_zero(n)
         class_invariant()
 
-        create_matrix(__method__, n)
+        mat = create_matrix(__method__, n)
         
         class_invariant()
         post_zero(n)
@@ -154,7 +158,7 @@ module MatrixDelegate
         pre_row_vector(row)
         class_invariant()
 
-        create_matrix(__method__, row)
+        mat = create_matrix(__method__, row)
         
         class_invariant()
         post_row_vector(row)
@@ -165,10 +169,15 @@ module MatrixDelegate
         pre_column_vector(column)
         class_invariant()
 
-        create_matrix(__method__, column)
+        mat = create_matrix(__method__, column)
         
         class_invariant()
         post_column_vector(column)
         mat
     end
+    
+    def coerce(obj)      
+      return [@matrix, obj]
+    end 
+    
 end

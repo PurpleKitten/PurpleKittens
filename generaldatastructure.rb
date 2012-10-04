@@ -8,6 +8,7 @@ class GeneralDataStructure
 
     attr_accessor :elements
     attr_reader :size
+    attr_reader :column_size
 
     def initialize(*rows)
         pre_init(rows)
@@ -18,8 +19,12 @@ class GeneralDataStructure
         #keeps the order that you put the
         #elements in
         
-        @elements = self.create_hash(rows)
-        @size = [rows.size,rows[0].size]
+        @elements = self.create_hash(*rows)
+        
+        #preconditions: at least 1 parameter
+        #responds to []
+        rows = rows[0]
+        @size, @column_size = rows.size,rows[0].size
 
         class_invariant()
         post_init(rows)
@@ -44,7 +49,7 @@ class GeneralDataStructure
 
     def each(&block)
         #yield the rows
-        (0..size[0]-1).each do |i|
+        (0..size-1).each do |i|
             yield self.row(i)
         end
         self.elements
@@ -55,9 +60,9 @@ class GeneralDataStructure
         class_invariant()
 
         row = Array.new()
-        (0..size[0]-1).each do |i|
+        (0..size-1).each do |i|
             if i == index
-                (0..size[1]-1).each do |j|
+                (0..column_size-1).each do |j|
                     row[j] = self[i,j]
                 end
             end
