@@ -1394,9 +1394,14 @@ class Matrix
     #
     def apply_through_coercion(obj, oper)
       coercion = obj.coerce(self)
+      puts coercion[0].to_s
+      puts coercion[1].to_s
+      
       raise TypeError unless coercion.is_a?(Array) && coercion.length == 2     
       coercion[0].public_send(oper, coercion[1])
-    rescue
+    rescue Exception => e  
+      puts e.message  
+      puts e.backtrace.inspect 
       raise TypeError, "#{obj.inspect} can't be coerced into #{self.class}"
     end
     private :apply_through_coercion

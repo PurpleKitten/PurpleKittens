@@ -21,9 +21,9 @@ module MatrixDelegate
         class_invariant
 
         if self.respond_to?(method_name)
-            result = self.send(method_name, args)
+            result = self.send(method_name, *args)
         else
-            result = @matrix.send(method_name, args)
+            result = @matrix.send(method_name, *args)
         end    
 
         class_invariant

@@ -5,17 +5,33 @@
 delegate = GeneralMatrixDelegate.new();
  
 blah = Matrix.I(5)
-puts "1: " + blah.to_s()
+puts blah.trace()
+
+#puts "1: " + blah.to_s()
 
 blah = SparseMatrix.identity(delegate, 5);
-puts "2: " + blah.to_s()
+#puts "2: " + blah.to_s()
 
 blah2 = SparseMatrix.diagonal(delegate,1,2,3,4,5)
 
-puts blah.to_s
-puts blah2.to_s
+#TRACE USES [i][i] on line matrix.rb:1165:in `block in trace'
+#puts "Trace: #{blah2.trace()} for:\n" + blah2.to_s + "\n"
 
-blah = blah * blah
+blah2 = SparseMatrix.rows(delegate,[[1,2,3],[4,5,6],[7,8,9]])
+
+#puts "Trace: #{blah2.trace()} for:\n" + blah2.to_s + "\n"
+
+
+#puts blah.to_s
+#puts blah2.to_s
+
+
+
+puts "Delegate: " + delegate.to_s();
+puts "blah: " + blah.to_s()
+
+#BROKEN - Inconsistent state between delegate & sparseMatrix
+#blah = blah * blah
 
 puts blah
 
