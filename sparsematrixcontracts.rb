@@ -20,6 +20,7 @@ module SparseMatrixContracts
     end
 
     def pre_empty(rowSize, colSize)
+        puts "Empty"
     end
     def post_empty(rowSize, colSize)
     end
@@ -44,7 +45,7 @@ module SparseMatrixContracts
     def post_scalar(n, value)
     end
 
-    def SparseMatrixContracts.pre_identity(n)
+    def pre_identity(n)
     end
     def post_identity(n)
     end

@@ -8,24 +8,19 @@ class GeneralMatrixDelegate
     
     include GeneralMatrixDelegateContracts
     include MatrixDelegate
-    
-  def to_s
-      "GeneralMatrixDelegate #{@matrix}"
-  end
-    
-    private
-    def create_matrix(method_name, *args)
-        pre_create_matrix(method_name, *args)
-        class_invariant
+    attr_reader :dataStructure
 
-        @matrix = Matrix.send(method_name, *args)
-        matrixData = MatrixDataStructure.General(@matrix.get_rows)
-        @matrix.replace_matrix_structure(matrixData)
-        
-        class_invariant
-        post_create_matrix(method_name, *args)
-        
-        @matrix
+    def to_s
+        "GeneralMatrixDelegate #{@matrix}"
+    end
+
+    def initialize(*rows)
+        @dataStructure="General"
+        create_matrix(*rows)
+    end
+
+    def self.check(*rows)
+        GeneralMatrixDelegate
     end
     
 end

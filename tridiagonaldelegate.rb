@@ -7,14 +7,22 @@ class TridiagonalMatrixDelegate
 
     include TridiagonalMatrixDelegateContracts
     include MatrixDelegate
+    attr_reader :dataStructure
 
-    def create_matrix(method_name, *args)
-        @matrix = Matrix.send(method_name, args)
-        matrixData = MatrixDataStructure.Tridiagonal(@matrix.get_rows)
-        @matrix.replace_data_structure(matrixData)
+    def to_s
+        "TridiagonalDelegate #{@matrix}"
     end
 
-    private_class_method :create_matrix
+    def initialize(*rows)
+        @dataStructure="Tridiagonal"
+        create_matrix(*rows)
+    end
+    
+    def self.check(*rows)
+        #insert processing here
+        #return TridiagonalMatrixDelegate
+        nil
+    end
 
 end
 
