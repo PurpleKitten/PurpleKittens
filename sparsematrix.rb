@@ -12,6 +12,7 @@ class SparseMatrix
     protected :matrix
 
     def initialize(*rows)
+        #assert rows > 0
         @delegate = SparseDelegateFactory.create(*rows)
         @matrix = @delegate.matrix
     end
