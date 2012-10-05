@@ -328,8 +328,14 @@ class Matrix
   alias element []
   alias component []
 
+    # @todo IX ME
   def []=(i, j, v)
-    self.get_rows()[i][j] = v
+    rows = self.get_rows()
+    if rows.is_a?(Array)
+      rows[i][j] = v
+    else
+     rows[i,j] = v
+    end
   end
   alias set_element []=
   alias set_component []=
@@ -625,8 +631,9 @@ class Matrix
   #
   def hermitian?
     self.Raise ErrDimensionMismatch unless square?
+    a = to_a
     each_with_index(:strict_upper).all? do |e, row, col|
-      e == rows[col][row].conj
+      e == a[col][row].conj
     end
   end
 
@@ -661,11 +668,12 @@ class Matrix
   #
   def orthogonal?
     self.Raise ErrDimensionMismatch unless square?
-    rows.each_with_index do |row, i|
+    a = to_a
+    a.each_with_index do |row, i|
       column_size.times do |j|
         s = 0
         row_size.times do |k|
-          s += row[k] * rows[k][j]
+          s += row[k] * a[k][j]
         end
         return false unless s == (i == j ? 1 : 0)
       end
@@ -729,8 +737,9 @@ class Matrix
   #
   def symmetric?
     self.Raise ErrDimensionMismatch unless square?
+    a = to_a
     each_with_index(:strict_upper).all? do |e, row, col|
-      e == rows[col][row]
+      e == a[col][row]
     end
   end
 
@@ -740,11 +749,12 @@ class Matrix
   #
   def unitary?
     self.Raise ErrDimensionMismatch unless square?
-    rows.each_with_index do |row, i|
+    a = to_a
+    a.each_with_index do |row, i|
       column_size.times do |j|
         s = 0
         row_size.times do |k|
-          s += row[k].conj * rows[k][j]
+          s += row[k].conj * a[k][j]
         end
         return false unless s == (i == j ? 1 : 0)
       end
@@ -926,6 +936,7 @@ class Matrix
   def inverse_from(src) # :nodoc:
     last = row_size - 1
     a = src.to_a
+    selfa = to_a
 
     0.upto(last) do |k|
       i = k
@@ -953,7 +964,7 @@ class Matrix
           a[ii][j] -= a[k][j] * q
         end
         0.upto(last) do |j|
-          self.get_rows()[ii][j] -= self.get_rows()[k][j] * q
+          selfa[ii][j] -= selfa[k][j] * q
         end
       end
 
@@ -961,7 +972,7 @@ class Matrix
         a[k][j] = a[k][j].quo(akk)
       end
       0.upto(last) do |j|
-        self.get_rows()[k][j] = self.get_rows()[k][j].quo(akk)
+        selfa[k][j] = selfa.quo(akk)
       end
     end
     self
@@ -1161,8 +1172,9 @@ class Matrix
   #
   def trace
     self.Raise ErrDimensionMismatch unless square?
+    a = to_a
     (0...column_size).inject(0) do |tr, i|
-      tr + self.get_rows()[i][i]
+      tr + a[i][i]
     end
   end
   alias tr trace

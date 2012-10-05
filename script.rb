@@ -4,8 +4,14 @@
 
 delegate = GeneralMatrixDelegate.new();
  
-blah = Matrix.I(5)
+blah = SparseMatrix.diagonal(delegate,1,2,3,4,5)#Matrix.I(5)
+
 puts blah.trace()
+puts blah.hermitian?()
+puts blah.orthogonal?()
+puts blah.symmetric?()
+puts blah.unitary?()
+puts blah.determinant()
 
 #puts "1: " + blah.to_s()
 
@@ -14,8 +20,9 @@ blah = SparseMatrix.identity(delegate, 5);
 
 blah2 = SparseMatrix.diagonal(delegate,1,2,3,4,5)
 
+
 #TRACE USES [i][i] on line matrix.rb:1165:in `block in trace'
-#puts "Trace: #{blah2.trace()} for:\n" + blah2.to_s + "\n"
+puts "Trace: #{blah2.trace()} for:\n" + blah2.to_s + "\n"
 
 blah2 = SparseMatrix.rows(delegate,[[1,2,3],[4,5,6],[7,8,9]])
 

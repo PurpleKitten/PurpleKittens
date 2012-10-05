@@ -191,7 +191,7 @@ class SparseMatrix
     
     def determinant
       pre_determinant()
-      result = delegate(__method__)
+      result = delegate_method(__method__)
       post_determinant(result)
       
       result
@@ -199,7 +199,7 @@ class SparseMatrix
     
     def eigensystem
       pre_eigensystem()
-      result = delegate(__method__)
+      result = delegate_method(__method__)
       post_eigensystem(result)
       
       result
@@ -207,15 +207,15 @@ class SparseMatrix
     
     def empty?
       pre_empty?()
-      result = delegate(__method__)
-      post_empty?(result)
+      result = delegate_method(__method__)
+      post_empty?()
             
       result
     end
     
     def hash()
       pre_hash()
-      result = delegate(__method__)
+      result = delegate_method(__method__)
       post_hash(result)
             
       result
@@ -223,31 +223,31 @@ class SparseMatrix
     
     def hermitian?()
       pre_hermitian?()
-      result = delegate(__method__)
-      post_hermitian?(result)
+      result = delegate_method(__method__)
+      post_hermitian?()
       
       result
     end
     
     def inverse()
       pre_inverse()
-      result = delegate(__method__)
-      post_inverse(result)
+      result = delegate_method(__method__)
+      post_inverse()
       
       result
     end
     
     def lower_triangular?()
       pre_lower_triangular?()
-      result = delegate(__method__)
-      post_lower_triangular?(result)
+      result = delegate_method(__method__)
+      post_lower_triangular?()
             
       result
     end
     
     def lup()
       pre_lup()
-      result = delegate(__method__)
+      result = delegate_method(__method__)
       post_lup()
       
       result
@@ -255,7 +255,7 @@ class SparseMatrix
     
     def normal?()
       pre_normal?()
-      result = delegate(__method__)
+      result = delegate_method(__method__)
       post_normal?()
       
       result
@@ -263,7 +263,7 @@ class SparseMatrix
     
     def orthogonal?()
       pre_orthogonal()
-      result = delegate(__method__)
+      result = delegate_method(__method__)
       post_orthogonal()
       
       result
@@ -271,7 +271,7 @@ class SparseMatrix
     
     def permutation?()
       pre_permutation()
-      result = delegate(__method__)
+      result = delegate_method(__method__)
       post_permutation()
       
       result
@@ -279,7 +279,7 @@ class SparseMatrix
     
     def rank()
       pre_rank()
-      result = delegate(__method__)
+      result = delegate_method(__method__)
       post_rank(result)
       
       result
@@ -287,7 +287,7 @@ class SparseMatrix
     
     def regular?()
       pre_regular?()
-      result = delegate(__method__)
+      result = delegate_method(__method__)
       post_regular?(result)
       
       result
@@ -295,7 +295,7 @@ class SparseMatrix
     
     def row_size()
       pre_row_size()
-      result = delegate(__method__)
+      result = delegate_method(__method__)
       post_row_size()
       
       result
@@ -303,7 +303,7 @@ class SparseMatrix
     
     def singular?()
       pre_singular?()
-      result = delegate(__method__)
+      result = delegate_method(__method__)
       post_singular?()
       
       result
@@ -311,7 +311,7 @@ class SparseMatrix
     
     def square?()
       pre_square()
-      result = delegate(__method__)
+      result = delegate_method(__method__)
       post_square()
       
       result
@@ -319,7 +319,7 @@ class SparseMatrix
     
     def symmetric?()
       pre_symmetric?()
-      result = delegate(__method__)
+      result = delegate_method(__method__)
       post_symmetric?()
       
       result
@@ -327,7 +327,7 @@ class SparseMatrix
     
     def to_a()
       pre_to_a()
-      result = delegate(__method__)
+      result = delegate_method(__method__)
       post_to_a()
       
       result
@@ -345,7 +345,7 @@ class SparseMatrix
   
     def trace()
       pre_trace()
-      result = delegate(__method__)
+      result = delegate_method(__method__)
       post_trace()
       
       result
@@ -353,7 +353,7 @@ class SparseMatrix
     
     def transpose()
       pre_transpose()
-      result = delegate(__method__)
+      result = delegate_method(__method__)
       post_transpose()
       
       result
@@ -361,7 +361,7 @@ class SparseMatrix
     
     def unitary?()
       pre_unitary?()
-      result = delegate(__method__)
+      result = delegate_method(__method__)
       post_unitary?()
       
       result
@@ -369,7 +369,7 @@ class SparseMatrix
     
     def upper_triangular?()
       pre_upper_triangular?()
-      result = delegate(__method__)
+      result = delegate_method(__method__)
       post_upper_triangular?()
             
       result
@@ -377,7 +377,7 @@ class SparseMatrix
     
     def zero?()
       pre_zero?()
-      result = delegate(__method__)
+      result = delegate_method(__method__)
       post_zero?()
             
       result
