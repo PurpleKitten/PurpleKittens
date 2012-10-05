@@ -4,9 +4,9 @@ module SparseMatrixContracts
     
     include Test::Unit::Assertions
 
-    def pre_init_matrix(delegate, method_name, args)
+    def pre_init(rows)
     end
-    def post_init_matrix(delegate, method_name, args)
+    def post_init(rows, result)
     end
 
     def pre_diagonal?(sm_self)
