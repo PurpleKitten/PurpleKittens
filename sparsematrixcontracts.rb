@@ -4,19 +4,9 @@ module SparseMatrixContracts
     
     include Test::Unit::Assertions
 
-    def pre_init_matrix(delegate, method_name, args)
+    def pre_init(rows)
     end
-    def post_init_matrix(delegate, method_name, args)
-    end
-
-    def pre_square_brackets(rows)
-    end
-    def post_square_brackets(rows)
-    end
-
-    def pre_diagonal(values)
-    end
-    def post_diagonal(values)
+    def post_init(rows, result)
     end
 
     def pre_diagonal?(sm_self)
@@ -26,46 +16,11 @@ module SparseMatrixContracts
       #None
     end
 
-    def pre_empty(rowSize, colSize)
-    end
-    def post_empty(rowSize, colSize)
-    end
-    
     def pre_empty?()
       #None
     end
     def post_empty?()
       #None
-    end
-
-    def pre_rows(rows, copy)
-    end
-    def post_rows(rows, copy)
-    end
-
-    def pre_columns(columns)
-    end
-    def post_columns(columns)
-    end
-
-    def pre_build(rowSize, colSize)
-    end
-    def post_build(rowSize, colSize)
-    end
-
-    def pre_scalar(n, value)
-    end
-    def post_scalar(n, value)
-    end
-
-    def SparseMatrixContracts.pre_identity(n)
-    end
-    def SparseMatrixContracts.post_identity(n)
-    end
-
-    def pre_zero(n)
-    end
-    def post_zero(n)
     end
 
     def pre_multiply(sm_self,m)
