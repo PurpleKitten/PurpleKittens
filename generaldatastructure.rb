@@ -28,7 +28,6 @@ class GeneralDataStructure
 
         class_invariant()
         post_init(rows)
-        self
     end
 
     def create_hash(rows)
@@ -116,11 +115,11 @@ class GeneralDataStructure
         pre_transpose
         class_invariant()
 
-        a = self.to_a
+        trans = self.to_a().transpose
 
         class_invariant()
         post_transpose
-        a.transpose
+        trans
     end
 
     def to_s

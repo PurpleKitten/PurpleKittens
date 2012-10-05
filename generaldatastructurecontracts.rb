@@ -47,6 +47,7 @@ module GeneralDataStructureContracts
     end
 
     def pre_row(index)
+        assert(index.is_a?(Integer), "Index must be an integer.")
         assert(index < @size || index >= 0, "Index out of bounds.")
     end
     def post_row(index, row)
@@ -73,14 +74,16 @@ module GeneralDataStructureContracts
         pre_row(index)
     end
     def post_fetch(index, default)
+        assert(self.row(index) == self.to_a()[index], "Row not fetched correctly.")
     end
 
-    def pre_transpose
+    def pre_transpose    
     end
     def post_transpose
     end
 
     def pre_to_s
+        assert(self.respond_to?(:to_a), "Cannot convert to string.")
     end
     def post_to_s
     end
@@ -91,6 +94,8 @@ module GeneralDataStructureContracts
     end
 
     def pre_equals(other)
+        assert(other.respond_to?(:each), "Cannot compare incompatible types.")
+        assert(other.respond_to?(:size), "Cannot compare object without size.")
     end
     def post_equals(other)
     end

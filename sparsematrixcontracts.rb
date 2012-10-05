@@ -18,7 +18,7 @@ module SparseMatrixContracts
     end
     def post_diagonal(values)
     end
-    
+
     def pre_diagonal?(sm_self)
       assert(sm_self.square?())
     end
@@ -67,7 +67,7 @@ module SparseMatrixContracts
     end
     def post_zero(n)
     end
-    
+
     def pre_multiply(sm_self,m)
       assert(!m.nil?)     
       assert(m.respond_to?("multiply") || m.respond_to?("*"))
@@ -162,10 +162,10 @@ module SparseMatrixContracts
       assert(result.column_size==sm_self.column_size)
     end
     
-    def pre_equal()
+    def pre_equals?()
       #None
     end
-    def post_equal()
+    def post_equals?()
       #None
     end 
     

@@ -1,6 +1,7 @@
 require './matrix_mod.rb'
 require './sparsematrixcontracts.rb'
 require 'test/unit'
+require './sparsedelegatefactory.rb'
 
 class SparseMatrix
 
@@ -9,93 +10,16 @@ class SparseMatrix
     attr_accessor :delegate
     attr_accessor :matrix
     protected :matrix
-    
-    def delegate(method_name, *args)
-        return @delegate.send(method_name, *args)
-    end
 
-    def initialize(delegate,matrix)
-        @delegate = delegate
-        @matrix = matrix
-    end
-    private :initialize
-
-    def self.[](delegate, *rows)
-        #pre_square_brackets(rows)
-        result = self.init_matrix(delegate, __method__, *rows)
-        #post_square_brackets(rows)
-        
-        result
-    end
-
-    def self.diagonal(delegate, *values)
-       # pre_diagonal(values)
-        result = self.init_matrix(delegate, __method__, *values)
-       # post_diagonal(values)
-
-        result
-    end
-
-    def self.empty(delegate, row_size = 0, col_size = 0)
-       # pre_empty(rowSize, colSize)
-        result = self.init_matrix(delegate, __method__, row_size, col_size)
-        #post_empty(rowSize, colSize)
-        
-        result
-    end
-    
-    def self.rows(delegate, copy = true, *rows)
-       # pre_rows(rows, copy)
-        result = self.init_matrix(delegate, __method__, copy, *rows)
-       # post_rows(rows, copy)
-        
-        result
-    end
-
-    def self.columns(delegate, columns)
-      #  pre_columns(columns)
-        result = self.init_matrix(delegate, __method__, columns)
-      #  post_columns(columns)
-        
-        result
-    end
-
-    def self.build(delegate, rowSize, columnSize = rowSize)
-       # pre_build(rowSize, colSize)
-        result = self.init_matrix(delegate, __method__, rowSize, columnSize)
-       # post_build(rowSize, colSize)
-        
-        result
-    end
-
-    def self.scalar(delegate, n, value)
-       # pre_scalar(n, value)
-        result = self.init_matrix(delegate, __method__, n, value)
-       # post_scalar(n, value)
-        
-        result
-    end
-
-    def self.identity(delegate, n)
-        SparseMatrixContracts.pre_identity(n)
-        result = self.init_matrix(delegate, __method__, n)
-        SparseMatrixContracts.post_identity(n)
-        
-        result
-    end
-
-    def self.zero(delegate, n)
-      #  pre_zero(n)
-        result = self.init_matrix(delegate, __method__, n)
-      #  post_zero(n)
-        
-        result
+    def initialize(*rows)
+        @delegate = SparseDelegateFactory.create(*rows)
+        @matrix = @delegate.matrix
     end
       
     def *(m)
         pre_multiply(self, m)
         result = delegate_method(__method__, m)
-        post_multiply(m)
+        post_multiply(self ,m, result)
         
         result
     end
@@ -138,9 +62,9 @@ class SparseMatrix
     alias divide /
     
     def ==(m)
-      pre_divide()
+      pre_equals?()
       result = delegate_method(__method__, m)
-      post_divide()
+      post_equals?()
       
       result
     end
@@ -163,7 +87,7 @@ class SparseMatrix
        
     def coerce(m)
       pre_coerce(m)
-      result = delegate(__method__, m)
+      result = @delegate.send(__method__, m)
       post_coerce(result)
       
       result
@@ -344,9 +268,7 @@ class SparseMatrix
       post_to_a(result)
       
       result
-    end
-    
-    
+    end  
     
     def to_s()
       pre_to_s()
@@ -404,43 +326,11 @@ class SparseMatrix
       result
     end
     
-    
-    
-    #other methods here
-    
-    private
-  
-    def self.init_matrix(delegate, method_name, *args)
-        
-        #pre_init_matrix(delegate, method_name, args)
-      
-        matrix = self.delegate_init(delegate, method_name, *args)
-        result = new delegate, matrix
-        
-        #post_init_matrix(delegate, method_name, args)
-        
-        result
+    def delegate_method(method_name, *args)
+        #assert - check one of them respond or raise exception?
+        #We are checking in the delegate if we respond to this method.
+        #See method_missing in matrixdelegate.rb
+        return @delegate.send(method_name, *args)
     end
-  
-  
-    def delegate_method(method_name, *args) 
-      #assert - check one of them respond or raise exception?
-      
-          if @delegate.respond_to?(method_name)
-              return @delegate.send(method_name, *args)
-          else
-              return @matrix.send(method_name, *args)
-        
-      end
-    end
-    
-    def self.delegate_init(delegate, method_name, *args)  
-       
-      if delegate.respond_to?(method_name)
-            return delegate.send(method_name, *args)
-        else
-            return Matrix.send(method_name, *args)
-        end 
-  end
-    
+ 
 end

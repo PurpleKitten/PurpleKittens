@@ -2,10 +2,10 @@ require 'test/unit'
 
 module GeneralMatrixDelegateContracts
 
-    def pre_create_matrix(method_name, *args)
+    def pre_create_matrix(*args)
 
     end
-    def post_create_matrix(method_name, *args)
+    def post_create_matrix(*args)
     end
 
     
