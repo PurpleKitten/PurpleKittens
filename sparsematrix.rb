@@ -11,10 +11,7 @@ class SparseMatrix
     attr_accessor :matrix
     protected :matrix
     
-    def delegate(method_name, *args)
-    end
-
-    def initialize(rows, type=nil)
+    def initialize(rows)
         @delegate = SparseDelegateFactory.create(rows)
         @matrix = @delegate.matrix
     end
@@ -103,7 +100,7 @@ class SparseMatrix
     def empty?
       pre_empty?()
       result = delegate_method(__method__)
-      post_empty?()
+      post_empty?(result)
             
       result
     end
