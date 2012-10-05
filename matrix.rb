@@ -328,7 +328,6 @@ class Matrix
   alias element []
   alias component []
 
-    # @todo IX ME
   def []=(i, j, v)
     rows = self.get_rows()
     if rows.is_a?(Array)
@@ -846,6 +845,7 @@ class Matrix
       return apply_through_coercion(m, __method__)
     end
   end
+  alias multiply *
 
   #
   # Matrix addition.
@@ -873,7 +873,8 @@ class Matrix
     }
     new_matrix rows, column_size
   end
-
+  alias plus +
+    
   #
   # Matrix subtraction.
   #   Matrix[[1,5], [4,2]] - Matrix[[9,3], [-4,1]]
@@ -900,7 +901,8 @@ class Matrix
     }
     new_matrix rows, column_size
   end
-
+  alias minus -
+  
   #
   # Matrix division (multiplication by the inverse).
   #   Matrix[[7,6], [3,9]] / Matrix[[2,9], [3,1]]
@@ -920,6 +922,7 @@ class Matrix
       return apply_through_coercion(other, __method__)
     end
   end
+  alias divide /
 
   #
   # Returns the inverse of the matrix.
@@ -1007,9 +1010,10 @@ class Matrix
       v, d, v_inv = eigensystem
       v * self.diagonal(*d.each(:diagonal).map{|e| e ** other}) * v_inv
     else
-      self.Raise ErrOperationNotDefined, "**", self.class, other.class
+        apply_through_coercion(other, __method__)
     end
   end
+  alias exp **
 
   #--
   # MATRIX FUNCTIONS -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-

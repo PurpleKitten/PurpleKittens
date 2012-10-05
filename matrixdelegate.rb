@@ -177,7 +177,7 @@ module MatrixDelegate
     end
     
     def coerce(obj)      
-      return [@matrix, obj]
+      return [obj, @matrix]
     end 
     
 end

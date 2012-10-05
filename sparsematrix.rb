@@ -77,25 +77,9 @@ class SparseMatrix
     end
 
     def self.identity(delegate, n)
-        #SparseMatrixContracts.pre_identity(n)
+        SparseMatrixContracts.pre_identity(n)
         result = self.init_matrix(delegate, __method__, n)
-       # post_identity(n)
-        
-        result
-    end
-
-    def self.unit(delegate, n)
-     #   pre_unit(n)
-        result = self.init_matrix(delegate, __method__, n)
-      #  post_unit(n)
-        
-        result
-    end
-
-    def self.I(delegate, n)
-      #  pre_I(n)
-        result = self.init_matrix(delegate, __method__, n)
-      #  post_I(n)
+        SparseMatrixContracts.post_identity(n)
         
         result
     end
@@ -107,97 +91,102 @@ class SparseMatrix
         
         result
     end
-
-    def self.row_vector(delegate, row)
-      #  pre_row_vector(row)
-        result = self.init_matrix(delegate, __method__, row)
-       # post_row_vector(row)
-        
-        result
-    end
-
-    def self.column_vector(delegate, column)
-      #  pre_column_vector(column)
-        result = self.init_matrix(delegate, __method__, column)
-      #  post_column_vector(column)
-        
-        result
-    end
       
     def *(m)
-        pre_multiply(m)
+        pre_multiply(self, m)
         result = delegate_method(__method__, m)
         post_multiply(m)
         
         result
     end
+    alias multiply *
     
     def **(m)
-        pre_exponential(m)
+        pre_exponential(self, m)
         result = delegate_method(__method__, m)
-        post_exponential(m)
+        post_exponential(self, m, result)
         
         result
     end
+    alias exp **
     
     def +(m)
-        pre_addition(m)
+        pre_addition(self, m)
         result = delegate_method(__method__, m)
-        post_addition(m)
+        post_addition(self, m, result)
         
         result
     end
+    alias plus +
     
     def -(m)
-        pre_subtraction(m)
+        pre_subtraction(self, m)
         result = delegate_method(__method__, m)
-        post_subtraction(m)
+        post_subtraction(self, m, result)
         
         result
     end
+    alias minus -
     
     def /(m)
-        pre_divide(m)
+        pre_divide(self, m)
         result = delegate_method(__method__, m)
-        post_divide(m)
+        post_divide(self, m, result)
         
         result
     end
+    alias divide /
     
     def ==(m)
-      pre_divide(m)
+      pre_divide()
       result = delegate_method(__method__, m)
-      post_divide(m)
+      post_divide()
       
       result
     end
     
     def [](i,j)
-      pre_access_ij_element(m)
-      result = delegate_method(__method__, m)
-      post_divide(m)
+      pre_access_ij_element(i,j)
+      result = @matrix.get_rows()[i,j]
+      post_access_ij_element(result)
       
       result
     end
     
+    def []=(i,j,k)
+      pre_set_ijk_element(i,j)
+      result = @matrix.get_rows()[i,j]=k
+      post_set_ijk_element(result)
+      
+      result
+    end
        
     def coerce(m)
       pre_coerce(m)
       result = delegate(__method__, m)
-      post_coerce(m)
+      post_coerce(result)
       
       result
     end
     
     def determinant
-      pre_determinant()
+      pre_determinant(self)
       result = delegate_method(__method__)
       post_determinant(result)
       
       result
     end
+    alias_method :det, :determinant
     
-    def eigensystem
+    def diagonal?
+      pre_diagonal?(self)
+      result = delegate_method(__method__)
+      post_diagonal?()
+      
+      result
+    end
+    
+    def eigensystem()
       pre_eigensystem()
       result = delegate_method(__method__)
       post_eigensystem(result)
@@ -213,6 +202,22 @@ class SparseMatrix
       result
     end
     
+    def find_index(*args)
+      pre_find_index(args)
+      result = delegate_method(__method__)
+      post_find_index(result)
+                  
+      result
+    end
+    
+    def round(ndigits=0)
+      pre_round(ndigits)
+      result = delegate_method(__method__)
+      post_round(self, result)
+                        
+      result
+    end
+    
     def hash()
       pre_hash()
       result = delegate_method(__method__)
@@ -222,7 +227,7 @@ class SparseMatrix
     end
     
     def hermitian?()
-      pre_hermitian?()
+      pre_hermitian?(self)
       result = delegate_method(__method__)
       post_hermitian?()
       
@@ -230,9 +235,9 @@ class SparseMatrix
     end
     
     def inverse()
-      pre_inverse()
+      pre_inverse(self)
       result = delegate_method(__method__)
-      post_inverse()
+      post_inverse(self, result)
       
       result
     end
@@ -254,7 +259,7 @@ class SparseMatrix
     end
     
     def normal?()
-      pre_normal?()
+      pre_normal?(self)
       result = delegate_method(__method__)
       post_normal?()
       
@@ -262,17 +267,17 @@ class SparseMatrix
     end
     
     def orthogonal?()
-      pre_orthogonal()
+      pre_orthogonal?(self)
       result = delegate_method(__method__)
-      post_orthogonal()
+      post_orthogonal?()
       
       result
     end
     
     def permutation?()
-      pre_permutation()
+      pre_permutation?(self)
       result = delegate_method(__method__)
-      post_permutation()
+      post_permutation?()
       
       result
     end
@@ -280,13 +285,13 @@ class SparseMatrix
     def rank()
       pre_rank()
       result = delegate_method(__method__)
-      post_rank(result)
+      post_rank(self, result)
       
       result
     end
     
     def regular?()
-      pre_regular?()
+      pre_regular?(self)
       result = delegate_method(__method__)
       post_regular?(result)
       
@@ -296,13 +301,21 @@ class SparseMatrix
     def row_size()
       pre_row_size()
       result = delegate_method(__method__)
-      post_row_size()
+      post_row_size(result)
       
       result
     end
     
+  def column_size()
+    pre_column_size()
+    result = delegate_method(__method__)
+    post_column_size(result)
+    
+    result
+  end
+    
     def singular?()
-      pre_singular?()
+      pre_singular?(sm_self)
       result = delegate_method(__method__)
       post_singular?()
       
@@ -310,15 +323,15 @@ class SparseMatrix
     end
     
     def square?()
-      pre_square()
+      pre_square?()
       result = delegate_method(__method__)
-      post_square()
+      post_square?()
       
       result
     end
     
     def symmetric?()
-      pre_symmetric?()
+      pre_symmetric?(self)
       result = delegate_method(__method__)
       post_symmetric?()
       
@@ -328,7 +341,7 @@ class SparseMatrix
     def to_a()
       pre_to_a()
       result = delegate_method(__method__)
-      post_to_a()
+      post_to_a(result)
       
       result
     end
@@ -338,15 +351,15 @@ class SparseMatrix
     def to_s()
       pre_to_s()
       result = "Sparse#{@matrix}"
-      post_to_s()
+      post_to_s(result)
       
       result
     end
   
     def trace()
-      pre_trace()
+      pre_trace(self)
       result = delegate_method(__method__)
-      post_trace()
+      post_trace(result)
       
       result
     end
@@ -354,13 +367,13 @@ class SparseMatrix
     def transpose()
       pre_transpose()
       result = delegate_method(__method__)
-      post_transpose()
+      post_transpose(self, result)
       
       result
     end
     
     def unitary?()
-      pre_unitary?()
+      pre_unitary?(self)
       result = delegate_method(__method__)
       post_unitary?()
       
@@ -382,7 +395,14 @@ class SparseMatrix
             
       result
     end
-    
+   
+    def each(which = :all, &block)
+      #pre_each()
+      result = @matrix.each(which, &block)
+      #post_each()
+            
+      result
+    end
     
     
     
