@@ -5,8 +5,12 @@ module SparseMatrixContracts
     include Test::Unit::Assertions
 
     def pre_init(rows)
+        assert(!rows.nil?, 'Rows must not be nil!')
+        assert(rows.is_a?(Array), 'Input rows must be an array.')
+
     end
-    def post_init(rows, result)
+    def post_init(rows)
+        assert(rows == self.to_a, 'Matrix not initialized properly.')
     end
 
     def pre_diagonal?(sm_self)

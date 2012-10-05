@@ -12,8 +12,10 @@ class SparseMatrix
     protected :matrix
 
     def initialize(*rows)
+        pre_init(rows)
         @delegate = SparseDelegateFactory.create(*rows)
         @matrix = @delegate.matrix
+        post_init(rows)
     end
       
     def *(m)
@@ -71,7 +73,7 @@ class SparseMatrix
     
     def [](i,j)
       pre_access_ij_element(i,j)
-      result = @matrix.get_rows()[i,j]
+      result = @matrix[i,j]
       post_access_ij_element(result)
       
       result

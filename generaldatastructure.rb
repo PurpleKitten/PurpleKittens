@@ -13,7 +13,6 @@ class GeneralDataStructure
     def initialize(*rows)
         pre_init(rows)
         class_invariant()
-        #assert(all rows are the same column size)
         
         #Note that in ruby 1.9.3, a hash
         #keeps the order that you put the
@@ -21,8 +20,6 @@ class GeneralDataStructure
         
         @elements = self.create_hash(*rows)
         
-        #preconditions: at least 1 parameter
-        #responds to []
         rows = rows[0]
         @size, @column_size = rows.size,rows[0].size
 
