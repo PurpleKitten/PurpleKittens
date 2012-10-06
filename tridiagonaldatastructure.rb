@@ -5,7 +5,9 @@ class TridiagonalDataStructure
     include Enumerable #Have to implement each()
     include TridiagonalDataStructureContracts
 
-    attr_accessor :elements
+    attr_accessor :upper
+    attr_accessor :lower
+    attr_accessor :middle
     attr_reader :size
     attr_reader :column_size
 
@@ -17,11 +19,17 @@ class TridiagonalDataStructure
         @middle = []
 
         create_data(rows)
+        @size = rows.size
+        @column_size = rows[0].size
 
-        #post_init(rows)
+        post_init(rows)
+        self
     end
 
     def create_data(rows)
+        pre_create_data(rows)
+        class_invariant
+
         upperxindex = 1
         lowerxindex = -1
 
@@ -37,6 +45,9 @@ class TridiagonalDataStructure
             lowerxindex += 1
             upperxindex += 1
         end
+        
+        class_invariant
+        post_create_data(rows)
 
         puts @upper.to_s
         puts @middle.to_s
@@ -44,10 +55,115 @@ class TridiagonalDataStructure
 
     end
 
-    def row(index)
+    def each(&block)
+        (0..size-1).each do |i|
+            yield self.row(i)
+        end
     end
 
+    def row(index)
+        pre_row(index)
+        class_invariant
+
+        row = Array.new()
+        (0..size-1).each do |i|
+            if i == index
+                (0..column_size-1).each do |j|
+                    row[j] = self[i,j]
+                end
+            end
+        end
+
+        class_invariant
+        post_row(index,row)
+        
+        row
+    end
+
+   
+    def [](i,j)
+        pre_square_brackets(i,j)
+        class_invariant
+
+        arr, index = get_diagonal(i,j)
+        val = 0
+        if arr
+            val = arr[index]
+        end
+
+        class_invariant
+        post_square_brackets(i,j)
+        val
+    end
+
+    def []=(i,j,v)
+        pre_set_value(i,j,v)
+        class_invariant
+
+        arr, index = get_diagonal(i,j)
+        arr[index]=v
+
+        class_invariant
+        post_set_value(i,j,v)
+    end
+
+    def fetch(index, default=nil)
+        pre_fetch(index, default)
+        class_invariant
+
+        val = self.to_a()[index]
+
+        class_invariant
+        post_fetch(index,default)
+
+        val
+    end
+
+    def transpose
+        pre_transpose
+        class_invariant
+
+        trans = self.to_a.transpose
+        
+        class_invariant
+        post_transpose
+
+        trans
+    end
+
+    def to_s
+        pre_to_s
+        class_invariant
+
+        s = "TridiagonalData #{self.to_a().to_s}"
+
+        class_invariant
+        post_to_s
+        s
+    end
+
+    def inspect
+        to_s
+    end
+
+    def hash
+    end
+
+    def ==(other)
+        pre_equals(other)
+        class_invariant
+
+        e = self.to_a == other.to_a
+        
+        class_invariant
+        post_equals(other)
+        e
+    end
+
+private
     def get_diagonal(i,j)
+        pre_get_diagonal(i,j)
+        class_invariant
 
         diff = j-i
         ret = false
@@ -64,38 +180,12 @@ class TridiagonalDataStructure
             ret = @lower 
         end
 
+        class_invariant
+        post_get_diagonal(i,j)
+
         return ret, index
 
     end
 
-    def [](i,j)
-        
-        arr, index = get_diagonal(i,j)
-        return arr[index]
-
-    end
-
-    def []=(i,j,v)
-        arr, index = get_diagonal(i,j)
-        arr[index]=v
-    end
-
-    def fetch(index, default=nil)
-    end
-
-    def transpose
-    end
-
-    def to_s
-    end
-
-    def hash
-    end
-
-    def ==(other)
-    end
     
-    def each(&block)
-    end
-
 end

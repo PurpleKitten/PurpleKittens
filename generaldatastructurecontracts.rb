@@ -77,7 +77,9 @@ module GeneralDataStructureContracts
         assert(self.row(index) == self.to_a()[index], "Row not fetched correctly.")
     end
 
-    def pre_transpose    
+    def pre_transpose
+        assert(self.respond_to?(:to_a), "Data must be able to be converted into an array with to_a!")
+
     end
     def post_transpose
     end
