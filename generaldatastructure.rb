@@ -103,11 +103,11 @@ class GeneralDataStructure
         pre_fetch(index,default)
         class_invariant()
 
-        array=self.to_a
+        val = self.to_a()[index]
 
         class_invariant()
         post_fetch(index, default)
-        array[index]
+        val
     end
 
     def transpose()
