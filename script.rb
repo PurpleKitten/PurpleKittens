@@ -4,7 +4,22 @@
 
 #delegate = GeneralMatrixDelegate.new();
  
+ 
+ 
 blah = SparseMatrix.new([[1,2,3],[1,2,3],[1,2,3]])
+
+#Zero Matrices are broken
+#blah = SparseMatrix.new(:empty, 0)
+#blah = SparseMatrix.new(:empty, 0, 0)
+#blah = SparseMatrix.new(:empty, 3, 0)
+#blah = SparseMatrix.new(:empty, 0, 3)
+  
+blah =  blah + 5
+
+blah = SparseMatrix.new([[1,2,3],[1,2,3],[1,2,3]])
+blah =  blah + 5
+  
+  
 blah = SparseMatrix.new([1,2,3],[1,2,3],[1,2,3])
 blah = SparseMatrix.new([[1,2,3]])
 blah = SparseMatrix.new([1,2,3])  
@@ -14,8 +29,8 @@ blah = SparseMatrix.new(:zero, 3,5)
 blah = SparseMatrix.new(:scalar, 5,3)
 blah = SparseMatrix.new(:build, 5,6) { rand(20) }
 
-blah =  blah + blah
-blah =  blah - blah
+#blah =  blah + blah
+#blah =  blah - blah
 
   
 #puts (blah + blah).to_s 

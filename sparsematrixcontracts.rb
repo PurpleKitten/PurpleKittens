@@ -77,8 +77,11 @@ module SparseMatrixContracts
     def post_multiply(sm_self,m, result)
       conditional(@@post_symbol) do
         assert(!result.nil?, NIL_RETURNED)
-        assert(result.row_size==sm_self.row_size, "Matrix returned has invalid row dimension: Expected-#{sm_self.row_size}, Result: #{result.row_size}")
-        assert(result.column_size==m.column_size, "Matrix returned has invalid column dimension: Expected-#{sm_self.column_size}, Result: #{result.column_size}")
+        
+        if(m.respond_to?("multiply"))
+          assert(result.row_size==sm_self.row_size, "Matrix returned has invalid row dimension: Expected-#{sm_self.row_size}, Result: #{result.row_size}")
+          assert(result.column_size==m.column_size, "Matrix returned has invalid column dimension: Expected-#{sm_self.column_size}, Result: #{result.column_size}")
+        end
       end
     end
     
@@ -120,12 +123,14 @@ module SparseMatrixContracts
         assert(result.row_size==sm_self.row_size, "Matrix returned has invalid row dimension: Expected-#{sm_self.row_size}, Result: #{result.row_size}")
         assert(result.column_size==sm_self.column_size, "Matrix returned has invalid column dimension: Expected-#{sm_self.column_size}, Result: #{result.column_size}")
         
-        sumElementsPre1,sumElementsPre2,sumElementsPost = 0, 0, 0
-        @matrix.each(:all){ |e| sumElementsPre1 += e }
-        m.each(:all){ |e| sumElementsPre2 += e }
-        result.each(:all){ |e| sumElementsPost += e }
+        if m.respond_to?("plus")
+          sumElementsPre1,sumElementsPre2,sumElementsPost = 0, 0, 0
+          @matrix.each(:all){ |e| sumElementsPre1 += e }
+          m.each(:all){ |e| sumElementsPre2 += e }
+          result.each(:all){ |e| sumElementsPost += e }
                 
-        assert(sumElementsPre1 + sumElementsPre2 == sumElementsPost, "Pre1 #{sumElementsPre1} + Pre2 #{sumElementsPre2} = Result: #{sumElementsPost}")
+          assert(sumElementsPre1 + sumElementsPre2 == sumElementsPost, "Pre1 #{sumElementsPre1} + Pre2 #{sumElementsPre2} = Result: #{sumElementsPost}")
+        end
       end
     end
     
@@ -145,13 +150,15 @@ module SparseMatrixContracts
         assert(!result.nil?, NIL_RETURNED)
         assert(result.row_size==sm_self.row_size, "Matrix returned has invalid row dimension: Expected-#{sm_self.row_size}, Result: #{result.row_size}")
         assert(result.column_size==sm_self.column_size, "Matrix returned has invalid column dimension: Expected-#{sm_self.column_size}, Result: #{result.column_size}")
-              
-        sumElementsPre1,sumElementsPre2,sumElementsPost = 0, 0, 0
-        @matrix.each(:all){ |e| sumElementsPre1 += e }
-        m.each(:all){ |e| sumElementsPre2 += e }
-        result.each(:all){ |e| sumElementsPost += e }
-                        
-        assert(sumElementsPre1 - sumElementsPre2 == sumElementsPost, "Pre1 #{sumElementsPre1} - Pre2 #{sumElementsPre2} = Result: #{sumElementsPost}")
+        
+        if m.respond_to?("minus")   
+          sumElementsPre1,sumElementsPre2,sumElementsPost = 0, 0, 0
+          @matrix.each(:all){ |e| sumElementsPre1 += e }
+          m.each(:all){ |e| sumElementsPre2 += e }
+          result.each(:all){ |e| sumElementsPost += e }
+                          
+          assert(sumElementsPre1 - sumElementsPre2 == sumElementsPost, "Pre1 #{sumElementsPre1} - Pre2 #{sumElementsPre2} = Result: #{sumElementsPost}")
+        end
       end     
     end  
     
@@ -171,8 +178,11 @@ module SparseMatrixContracts
     def post_divide(sm_self, m, result)
       conditional(@@post_symbol) do
         assert(!result.nil?, NIL_RETURNED)
-        assert(result.row_size==sm_self.row_size, "Matrix provided has invalid row dimension: Expected-#{sm_self.row_size}, Result: #{result.row_size}")
-        assert(result.column_size==sm_self.column_size, "Matrix provided has invalid column dimension: Expected-#{sm_self.column_size}, Result: #{result.column_size}")
+        
+        if m.respond_to?("divide")
+          assert(result.row_size==sm_self.row_size, "Matrix provided has invalid row dimension: Expected-#{sm_self.row_size}, Result: #{result.row_size}")
+          assert(result.column_size==sm_self.column_size, "Matrix provided has invalid column dimension: Expected-#{sm_self.column_size}, Result: #{result.column_size}")
+        end
       end
     end
     
@@ -574,15 +584,17 @@ module SparseMatrixContracts
       #A-B = A + -B
       assert(smatrixA - smatrixB == smatrixA + (-1 * smatrixB), INVARIANT + "A-B = A + -B")
       
-      smatrixI = SparseMatrix.new(:identity, side_length_1) { rand(20) }
-      #I=Rowsize*Rowsize
-      #Ix = X
-      assert(smatrixI * self == self, INVARIANT + "Ix = X")
+      if(side_length_1 > 0)
+        smatrixI = SparseMatrix.new(:identity, side_length_1) { rand(20) }
+        #I=Rowsize*Rowsize
+        #Ix = X
+        assert(smatrixI * self == self, INVARIANT + "Ix = X")
 
-      smatrixI = SparseMatrix.new(:identity, side_length_2) { rand(20) }
-      #I=columnsize*columnsize
-      #xI = x
-      assert(self * smatrixI == self, INVARIANT + "xI = x")
+        smatrixI = SparseMatrix.new(:identity, side_length_2) { rand(20) }
+        #I=columnsize*columnsize
+        #xI = x
+        assert(self * smatrixI == self, INVARIANT + "xI = x")
+      end
       
       if(self.square?)
         #(A+B)C=AC+BC
@@ -602,7 +614,7 @@ module SparseMatrixContracts
           #A / B = A (/B)
           assert(smatrixA / smatrixB = smatrixA * (smatrixB.inverse()), INVARIANT + "A \/ B = A (\/B)")
           
-          #AA-1 = A-1A = I        
+          #AA-1 = A-1A = I  
           assert(smatrixA * smatrixA.inverse == smatrixI, INVARIANT + "AA-1 = A-1A = I")
           assert(smatrixA.inverse * smatrixA == smatrixI, INVARIANT + "AA-1 = A-1A = I")
     

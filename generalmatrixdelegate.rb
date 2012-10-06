@@ -10,10 +10,6 @@ class GeneralMatrixDelegate
     include MatrixDelegate
     attr_reader :dataStructure
 
-    def to_s
-        "GeneralMatrixDelegate #{@matrix}"
-    end
-
     def initialize(*rows)
         @dataStructure="General"
         create_matrix(*rows)
@@ -23,4 +19,69 @@ class GeneralMatrixDelegate
         GeneralMatrixDelegate
     end
     
+    def +(m)
+      pre_plus_sign(m)
+      if(m.respond_to?("plus"))
+        result = plus(m)
+      else
+        result = scalar_operation(){|x| x + m.to_f}      
+      end
+      
+      post_plus_sign(m, result)
+      result
+    end
+    
+    def to_s
+      pre_to_s
+        result = "GeneralMatrixDelegate #{@matrix}"
+      post_to_s(result)
+      
+      result
+    end
+    
+    def hash
+      pre_hash
+      
+      post_hash
+    end
+    
+    def ==(other)
+      pre_equals?()
+      
+      #temp impl
+      if(other.respond_to?("to_a"))
+        result = @matrix.to_a == other.to_a
+      else
+        result = false
+      end
+      
+      post_equals?()
+      
+      result
+    end
+    
+    private 
+    def plus(m)
+     pre_plus(m)
+     
+     #temp
+     result = @matrix.send("+", m)
+      
+     post_plus(m, result)
+     
+     result
+    end
+    
+    def scalar_operation(&block)
+      pre_scalar_operation(&block)
+      result_matrix = SparseMatrix.new(self.to_a)              
+      @matrixData.elements.each_key do |key|
+        result_matrix[key[0], key[1]] = yield(self[key[0], key[1]]).to_i
+      end
+      
+      post_scalar_operation(result_matrix)               
+      result_matrix
+    end
+    
+
 end

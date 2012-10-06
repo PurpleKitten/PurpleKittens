@@ -4,7 +4,8 @@ require 'test/unit'
 require './sparsedelegatefactory.rb'
 
 class SparseMatrix
-
+    
+    include Enumerable #Have to implement each()
     include SparseMatrixContracts
 
     attr_accessor :delegate
@@ -327,6 +328,18 @@ class SparseMatrix
             
       result
     end
+    
+    def x()
+      delegate_method(__method__)
+    end
+    
+    def each_(*args, &block)
+      #pre_each()
+      result = delegate_method(__method__,*args, &block)
+      #post_each()
+            
+      result
+    end
    
     def each(which = :all, &block)
       #pre_each()
@@ -336,11 +349,11 @@ class SparseMatrix
       result
     end
     
-    def delegate_method(method_name, *args)
+    def delegate_method(method_name, *args, &block)
         #assert - check one of them respond or raise exception?
         #We are checking in the delegate if we respond to this method.
         #See method_missing in matrixdelegate.rb
-        return @delegate.send(method_name, *args)
+        return @delegate.send(method_name, *args, &block)
     end
  
 end

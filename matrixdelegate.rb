@@ -12,8 +12,8 @@ module MatrixDelegate
         class_invariant
 
         @matrix = matrix
-        matrixData = MatrixDataStructure.send(@dataStructure, @matrix.to_a)
-        @matrix.replace_matrix_structure(matrixData)
+        @matrixData = MatrixDataStructure.send(@dataStructure, @matrix.to_a)
+        @matrix.replace_matrix_structure(@matrixData)
         
         class_invariant
         post_create_matrix(@matrix)

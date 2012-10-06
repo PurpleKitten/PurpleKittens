@@ -68,7 +68,7 @@ class SparseDelegateFactory
         #container has to_a
         containerArray = container.to_a
         
-        raise ArgumentError, 'Invalid arguments provided to create sparse matrix.' unless containerArray.size > 0
+        raise ArgumentError, 'Invalid arguments provided to create sparse matrix.' unless containerArray.size >= 0
         
         if(self.arrayContainsArrayables(container))
           #send as rows:: [[],[],[]]

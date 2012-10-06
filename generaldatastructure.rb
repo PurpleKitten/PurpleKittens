@@ -11,7 +11,7 @@ class GeneralDataStructure
     attr_reader :column_size
 
     def initialize(*rows)
-        pre_init(rows)
+        pre_init(*rows)
         class_invariant()
         
         #Note that in ruby 1.9.3, a hash
@@ -46,10 +46,22 @@ class GeneralDataStructure
     end
 
     def each(&block)
-        #yield the rows
+        pre_each(&block)
         (0..size-1).each do |i|
             yield self.row(i)
         end
+        post_each(&block)
+        
+        self.elements
+    end
+    
+    def each_key(&block)
+        pre_each_key(&block)
+        @elements.each_key do
+            yield
+        end
+        
+        post_each_key()       
         self.elements
     end
 
@@ -128,7 +140,7 @@ class GeneralDataStructure
         s = "#{self.to_a}"
 
         class_invariant()
-        post_to_s
+        post_to_s(s)
         s
     end
 
@@ -137,14 +149,17 @@ class GeneralDataStructure
         class_invariant()
 
         class_invariant()
-        post_hash
+        post_hash(result)
     end
 
     def ==(other)
         pre_equals
         class_invariant()
         #temp implementation
-        result = self.to_a == other
+        
+        return false unless other.respond_to("to_a")
+        
+        result = self.to_a == other.to_a
         class_invariant()
         post_equals
         
