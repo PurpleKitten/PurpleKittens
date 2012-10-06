@@ -7,7 +7,11 @@ module GeneralDataStructureContracts
     def pre_init(rows)
         assert(rows != nil, "Rows must be not nil!")
         
-        col_size = rows[0].size
+        if(rows[0].respond_to?("size"))
+          col_size = rows[0].size
+        else
+          col_size = 1
+        end
         
         rows.each do |row|
             assert(row.size == col_size, "All rows must be the same length!")
@@ -17,8 +21,15 @@ module GeneralDataStructureContracts
     def post_init(rows)
         assert(self.to_a == rows, "Data created was corrupted. \
                                    Rows input were invalidly processed")
+                                   
+          if(rows[0].respond_to?("size"))
+             col_size = rows[0].size
+          else
+             col_size = 1
+          end
+                                   
         assert(@elements != nil)
-        assert(@size == rows.size  && @column_size = rows[0].size)
+        assert(@size == rows.size  && @column_size = col_size)
     end
 
     def pre_create_hash(rows)

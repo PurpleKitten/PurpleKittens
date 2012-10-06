@@ -11,11 +11,11 @@ class SparseMatrix
     attr_accessor :matrix
     protected :matrix
 
-    def initialize(*rows)
+    def initialize(*rows, &block)
         pre_init(rows)
-        @delegate = SparseDelegateFactory.create(*rows)
+        @delegate = SparseDelegateFactory.create(*rows, &block)
         @matrix = @delegate.matrix
-        post_init(rows)
+        post_init()
     end
       
     def *(m)
@@ -64,6 +64,14 @@ class SparseMatrix
     alias divide /
     
     def ==(m)
+      pre_equals?()
+      result = delegate_method(__method__, m)
+      post_equals?()
+      
+      result
+    end
+    
+    def ===(m)
       pre_equals?()
       result = delegate_method(__method__, m)
       post_equals?()
@@ -129,7 +137,7 @@ class SparseMatrix
     end
     
     def find_index(*args)
-      pre_find_index(args)
+      pre_find_index(*args)
       result = delegate_method(__method__)
       post_find_index(result)
                   

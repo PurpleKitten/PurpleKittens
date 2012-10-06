@@ -12,7 +12,12 @@ blah = SparseMatrix.new(:identity, 3)
 blah = SparseMatrix.new(:diagonal, 1,2,3)  
 blah = SparseMatrix.new(:zero, 3,5)
 blah = SparseMatrix.new(:scalar, 5,3)
+blah = SparseMatrix.new(:build, 5,6) { rand(20) }
 
+blah =  blah + blah
+blah =  blah - blah
+
+  
 #puts (blah + blah).to_s 
 #puts (blah * blah).to_s 
 ##puts (blah / blah).to_s 

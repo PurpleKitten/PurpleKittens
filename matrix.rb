@@ -783,15 +783,16 @@ class Matrix
   # Returns +true+ if and only if the two matrices contain equal elements.
   #
   def ==(other)
-    return false unless self === other &&
+    
+    return false unless self.to_a === other.to_a &&
                         column_size == other.column_size # necessary for empty matrices
-    rows == other.rows
+    rows.to_a == other.to_a
   end
 
   def eql?(other)
-    return false unless self === other &&
+    return false unless self.to_a === other.to_a &&
                         column_size == other.column_size # necessary for empty matrices
-    rows.eql? other.rows
+    rows.to_a.eql? other.to_a
   end
 
   #
@@ -932,14 +933,14 @@ class Matrix
   #
   def inverse
     self.Raise ErrDimensionMismatch unless square?
-    self.I(row_size).send(:inverse_from, self)
+    Matrix.I(row_size).send(:inverse_from, self)
   end
   alias inv inverse
 
   def inverse_from(src) # :nodoc:
     last = row_size - 1
     a = src.to_a
-    selfa = to_a
+    self_a = to_a
 
     0.upto(last) do |k|
       i = k
@@ -954,7 +955,7 @@ class Matrix
       self.Raise ErrNotRegular if akk == 0
       if i != k
         a[i], a[k] = a[k], a[i]
-        self.get_rows()[i], self.get_rows()[k] = self.get_rows()[k], self.get_rows()[i]
+        self_a[i], self_a[k] = self_a[k], self_a[i]
       end
       akk = a[k][k]
 
@@ -967,7 +968,7 @@ class Matrix
           a[ii][j] -= a[k][j] * q
         end
         0.upto(last) do |j|
-          selfa[ii][j] -= selfa[k][j] * q
+          self_a[ii][j] -= self_a[k][j] * q
         end
       end
 
@@ -975,10 +976,10 @@ class Matrix
         a[k][j] = a[k][j].quo(akk)
       end
       0.upto(last) do |j|
-        selfa[k][j] = selfa.quo(akk)
+        self_a[k][j] = self_a[k][j].quo(akk)
       end
     end
-    self
+    Matrix.rows(self_a)
   end
   private :inverse_from
 

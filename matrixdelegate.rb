@@ -7,16 +7,16 @@ module MatrixDelegate
 
     attr_reader :matrix
 
-    def create_matrix(*rows)
-        pre_create_matrix(*rows)
+    def create_matrix(matrix)
+        pre_create_matrix(matrix)
         class_invariant
 
-        @matrix = Matrix.[](*rows)
-        matrixData = MatrixDataStructure.send(@dataStructure, *rows)
+        @matrix = matrix
+        matrixData = MatrixDataStructure.send(@dataStructure, @matrix.to_a)
         @matrix.replace_matrix_structure(matrixData)
         
         class_invariant
-        post_create_matrix(*rows)
+        post_create_matrix(@matrix)
         
         @matrix
     end

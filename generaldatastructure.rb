@@ -21,7 +21,9 @@ class GeneralDataStructure
         @elements = self.create_hash(*rows)
         
         rows = rows[0]
-        @size, @column_size = rows.size,rows[0].size
+        
+        rows.respond_to?("size") ? @size = rows.size : @size = 1
+        rows[0].respond_to?("size") ? @column_size = rows[0].size : @column_size = 1
 
         class_invariant()
         post_init(rows)
@@ -30,7 +32,7 @@ class GeneralDataStructure
     def create_hash(rows)
         pre_create_hash(rows)
         class_invariant()
-
+        
         new_hash = Hash.new
         rows.each_with_index do |row,i|
             row.each_with_index do |col,j|
@@ -141,9 +143,12 @@ class GeneralDataStructure
     def ==(other)
         pre_equals
         class_invariant()
-
+        #temp implementation
+        result = self.to_a == other
         class_invariant()
         post_equals
+        
+        result
     end
 
 end
