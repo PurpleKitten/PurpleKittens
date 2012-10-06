@@ -8,6 +8,9 @@ module SparseMatrixContracts
     #We only turn this override on in class invarient to fix the whole
     @@override = false
     
+    #CHANGE FOR SPEED, BUT INVARIANTS WILL NOT BE CHECKED
+    @@override_class_invariants = false
+  
     @@pre_symbol = :pre
     @@post_symbol = :post
     
@@ -122,7 +125,7 @@ module SparseMatrixContracts
         m.each(:all){ |e| sumElementsPre2 += e }
         result.each(:all){ |e| sumElementsPost += e }
                 
-        assert(sumElementsPre1 + sumElementsPre2 == sumElementsPost, "Pre1 #{sumElementsPre1} + Pre2 #{sumElementsPre2} = Result: #{sumElementsPost}", "Addition corrupted")
+        assert(sumElementsPre1 + sumElementsPre2 == sumElementsPost, "Pre1 #{sumElementsPre1} + Pre2 #{sumElementsPre2} = Result: #{sumElementsPost}")
       end
     end
     
@@ -517,6 +520,7 @@ module SparseMatrixContracts
 
     
     def class_invariant
+      return if @@override_class_invariants
       @@override = true
       @matrix.row_size == @delegate.row_size
       @matrix.column_size == @delegate.column_size
