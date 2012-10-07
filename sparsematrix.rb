@@ -329,10 +329,6 @@ class SparseMatrix
       result
     end
     
-    def x()
-      delegate_method(__method__)
-    end
-    
     def each_(*args, &block)
       #pre_each()
       result = delegate_method(__method__,*args, &block)
@@ -350,10 +346,14 @@ class SparseMatrix
     end
     
     def delegate_method(method_name, *args, &block)
-        #assert - check one of them respond or raise exception?
+
+        pre_delegate_method(method_name)
         #We are checking in the delegate if we respond to this method.
         #See method_missing in matrixdelegate.rb
-        return @delegate.send(method_name, *args, &block)
+        result = @delegate.send(method_name, *args, &block)
+        post_delegate_method
+        
+      result
     end
  
 end

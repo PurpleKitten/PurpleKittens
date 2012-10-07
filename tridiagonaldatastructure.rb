@@ -11,9 +11,9 @@ class TridiagonalDataStructure
     attr_reader :size
     attr_reader :column_size
 
-    def initialize(*rows)
+    def initialize(rows)
         pre_init(rows)
-
+      
         @upper = []
         @lower = []
         @middle = []
@@ -21,15 +21,14 @@ class TridiagonalDataStructure
         create_data(rows)
         @size = rows.size
         @column_size = rows[0].size
-
+        
         post_init(rows)
         self
     end
 
     def create_data(rows)
         pre_create_data(rows)
-        class_invariant
-
+        
         upperxindex = 1
         lowerxindex = -1
 
@@ -43,15 +42,10 @@ class TridiagonalDataStructure
 
             @middle << row[i]
             lowerxindex += 1
-            upperxindex += 1
+            upperxindex += 1           
         end
         
-        class_invariant
         post_create_data(rows)
-
-        puts @upper.to_s
-        puts @middle.to_s
-        puts @lower.to_s
 
     end
 

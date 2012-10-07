@@ -30,12 +30,14 @@ class SparseDelegateFactory
         type = nil
 
         @@delegates.each do |del|
-            type = del.check(rows)
+            type = del.check(rows)          
+            break if !type.nil?           
         end
 
         if type == nil
             type = GeneralMatrixDelegate
         end
+        
         post_determine_delegate(type)
 
         type

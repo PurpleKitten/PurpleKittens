@@ -2,13 +2,6 @@ require 'test/unit'
 
 module GeneralMatrixDelegateContracts
 
-    def pre_create_matrix(*args)
-    end
-    def post_create_matrix(*args)
-      
-      class_invariant
-    end
-    
     def pre_plus_sign(m)
       class_invariant
       assert(m.respond_to?("+") || m.respond_to?("plus"))
@@ -17,17 +10,6 @@ module GeneralMatrixDelegateContracts
       assert(!result.nil?, "Nil return detected")
       assert(result.row_size==@matrix.row_size, "Matrix returned has invalid row dimension: Expected-#{@matrix.row_size}, Result: #{result.row_size}")
       assert(result.column_size==@matrix.column_size, "Matrix returned has invalid column dimension: Expected-#{@matrix.column_size}, Result: #{result.column_size}")
-      class_invariant
-    end
-    
-    def pre_scalar_operation(&block)
-      class_invariant
-      assert(block_given?)
-    end
-    
-    def post_scalar_operation(result_matrix)    
-      assert(@matrix.row_size == result_matrix.row_size)
-      assert(@matrix.column_size == result_matrix.column_size)
       class_invariant
     end
     
@@ -75,7 +57,7 @@ module GeneralMatrixDelegateContracts
       class_invariant
     end
     
-    def pre_equals?(other) 
+    def pre_equals?() 
       class_invariant 
       #None
     end

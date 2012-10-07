@@ -5,7 +5,10 @@ module MatrixDelegateContracts
     include Test::Unit::Assertions
 
     def pre_method_missing(method_name, *args)
-        assert(self.respond_to?(method_name) || @matrix.respond_to?(method_name),
+        assert(!method_name.nil?, "Delegated method name cannot be nil")
+        assert(method_name.respond_to?("to_s"), "Delegated method representation must respond to to_s")
+        assert(!method_name.to_s.empty?, "Delegated method representation's string cannot be empty")  
+        assert(self.respond_to?(method_name.to_s) || @matrix.respond_to?(method_name.to_s),
                "Method \"#{method_name}\" not defined in delegate or Matrix class.")
     end
     def post_method_missing(method_name, *args)
@@ -35,6 +38,17 @@ module MatrixDelegateContracts
       assert(!result.nil?, "Result of coercion cannot be nil")
       assert(result.is_a?(Array), "Result of coerce must be an array")
       assert(result.size == 2, "Coerce array result should have a return length of 2")  
+    end
+    
+    def pre_scalar_operation(&block)
+      class_invariant
+      assert(block_given?)
+    end
+    
+    def post_scalar_operation(result_matrix)    
+      assert(@matrix.row_size == result_matrix.row_size)
+      assert(@matrix.column_size == result_matrix.column_size)
+      class_invariant
     end
     
     def class_invariant

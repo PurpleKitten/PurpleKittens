@@ -5,15 +5,28 @@ module TridiagonalDataStructureContracts
     include Test::Unit::Assertions
     include GeneralDataStructureContracts
 
-    def class_invariant
+    def class_invariant     
         assert(@size == @column_size, "Data has changed!")
         assert(@middle.size == @size, "Data has changed!")
     end
 
+    
+    def pre_init(*rows)
+    end
+    
     def post_init(rows)
         assert(@upper != nil)
         assert(@lower != nil)
         assert(@middle != nil)
+        
+        puts self.to_a.to_s
+        puts rows.to_s
+        
+        puts rows.size.to_s
+        puts @size.to_s
+        puts @column_size.to_s
+        puts rows[0].size
+        
         assert(self.to_a == rows, "Data created was corrupted. \
                                    Rows input were invalidly processed")
         assert(@size == rows.size  && @column_size = rows[0].size)
@@ -43,5 +56,10 @@ module TridiagonalDataStructureContracts
     end
     def post_create_data(rows)
         assert(!@middle.empty?, "Datastructure not created properly!")
+    end
+    def pre_row(index)
+    end
+    
+    def post_row(index,row)
     end
 end

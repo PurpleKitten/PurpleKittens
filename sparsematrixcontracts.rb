@@ -5,7 +5,7 @@ module SparseMatrixContracts
     include Test::Unit::Assertions
 
     #DO NOT CHANGE
-    #We only turn this override on in class invarient to fix the whole
+    #We only turn this override on in class invariant to avoid recursion issue
     @@override = false
     
     #CHANGE FOR SPEED, BUT INVARIANTS WILL NOT BE CHECKED
@@ -527,16 +527,33 @@ module SparseMatrixContracts
         #None
       end
     end
+    
+    def pre_delegate_method(method_name)
+      conditional(@@pre_symbol) do
+        assert(!method_name.nil?, "Provided method for delegation cannot be nil")
+        assert(method_name.respond_to?("to_s"), "Provided method to delegate (by name of method) must respond to to_s")
+        assert(!method_name.to_s.empty?, "to_s of method name cannot be empty")  
+      end
+    end
+    
+    def post_delegate_method()
+      conditional(@@post_symbol) do
+         #None
+      end
+    end
 
     
     def class_invariant
       return if @@override_class_invariants
-      @@override = true
+      
+      #TODO Might need to caught exceptions because of this (when its true we aren't running pre/post conditions 
+      #- it would cause infinite recursion)
+      @@override = true  
+     
       @matrix.row_size == @delegate.row_size
       @matrix.column_size == @delegate.column_size
-      
-      #Mighe be able to replace size checks with this depending on how its implemented
-      #@matrix == @delegate
+
+      @matrix == @delegate
         
       side_length_1 = self.row_size
       side_length_2 = self.column_size

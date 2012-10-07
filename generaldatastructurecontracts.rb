@@ -15,7 +15,6 @@ module GeneralDataStructureContracts
         assert(rows != nil, "Invalid parameters specified to initalize")
         assert(rows.respond_to?("[]"), "Rows doesn't respond to []")
         assert(rows.respond_to?("size"), "Rows doesn't respond to size")
-        assert(rows.size >= 0, "No parameters passed into initialize")
         
         
         if(rows[0].respond_to?("size"))
