@@ -38,8 +38,15 @@ module MatrixDelegate
         result
     end
         
-    def coerce(obj)      
-      return [obj, @matrix]
+    def coerce(obj)
+      pre_coerce()
+      class_invariant
+      
+      result = [obj, @matrix]
+      
+      post_coerce(result)
+      class_invariant
+      result
     end 
     
 end

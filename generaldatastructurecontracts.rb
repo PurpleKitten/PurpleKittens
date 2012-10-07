@@ -151,7 +151,7 @@ module GeneralDataStructureContracts
         assert(other.respond_to?(:each), "Cannot compare incompatible types.")
         assert(other.respond_to?(:size), "Cannot compare object without size.")
     end
-    def post_equals(other)
+    def post_equals()
       class_invariant
     end
     

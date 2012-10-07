@@ -18,7 +18,7 @@ class TridiagonalMatrixDelegate
         create_matrix(*rows)
     end
     
-    def self.check(*rows)
+    def self.check(rows)
         #insert processing here
         #return TridiagonalMatrixDelegate
         nil

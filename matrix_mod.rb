@@ -4,13 +4,17 @@ require 'test/unit'
 
 class Matrix
     
+    include Test::Unit::Assertions
     include MatrixModContracts
 
     #This method is to be used in the delegate to override the 
     #matrix structure
     def replace_matrix_structure(struct)
-        #assert( struct.responds_to?(transpose,each,fetch,size,map,hash, to_a)
-        @rows = struct
+        pre_replace_structure(struct)
+        result = @rows = struct
+        post_replace_structure(struct, result)
+        
+        result
     end
 
 end

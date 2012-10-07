@@ -153,11 +153,11 @@ class GeneralDataStructure
     end
 
     def ==(other)
-        pre_equals
+        pre_equals(other)
         class_invariant()
         #temp implementation
         
-        return false unless other.respond_to("to_a")
+        return false unless other.respond_to?("to_a")
         
         result = self.to_a == other.to_a
         class_invariant()
