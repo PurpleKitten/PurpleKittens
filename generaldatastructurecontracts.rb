@@ -10,36 +10,24 @@ module GeneralDataStructureContracts
         assert(rows.respond_to?("size"), "Rows wrapper doesn't respond to size")
         assert(rows.size > 0, "No parameters passed into initialize")
         
-        rows = rows[0] #remove args* wrapper
-        
-        assert(rows != nil, "Invalid parameters specified to initalize")
-        assert(rows.respond_to?("[]"), "Rows doesn't respond to []")
-        assert(rows.respond_to?("size"), "Rows doesn't respond to size")
-        
-        
-        if(rows[0].respond_to?("size"))
-          column_size = rows[0].size
-        else
-          column_size = 1
-        end
-        
+        assert(rows[0] != nil, "Invalid parameters specified to initalize")
+        assert(rows[0].respond_to?("[]"), "Rows doesn't respond to []")
+        assert(rows[0].respond_to?("size"), "Rows doesn't respond to size")
+        assert(rows[0].size >= 0, "No parameters passed into initialize")
+
+        col_size = rows[0].size
+
         rows.each do |row|
-            assert(row.size == column_size, "All rows must be the same length!")
+            assert(row.size == col_size, "All rows must be the same length!")
         end
 
     end
-    def post_init(rows)
+    def post_init(*rows)
         assert(self.to_a == rows, "Data created was corrupted. \
                                    Rows input were invalidly processed")
-                                   
-          if(rows[0].respond_to?("size"))
-             col_size = rows[0].size
-          else
-             col_size = 1
-          end
-                                   
         assert(@elements != nil)
-        assert(@size == rows.size  && @column_size = col_size)
+        col_size = rows[0].size
+        assert(@size == rows.size  && @column_size == col_size)
     end
 
     def pre_create_hash(rows)

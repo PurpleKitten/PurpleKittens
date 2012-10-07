@@ -129,7 +129,7 @@ class TridiagonalDataStructure
         pre_to_s
         class_invariant
 
-        s = "TridiagonalData #{self.to_a().to_s}"
+        s = "#{self.to_a().to_s}"
 
         class_invariant
         post_to_s

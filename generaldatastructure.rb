@@ -18,15 +18,13 @@ class GeneralDataStructure
         #keeps the order that you put the
         #elements in
         
-        @elements = self.create_hash(*rows)
+        @elements = self.create_hash(rows)
         
-        rows = rows[0]
-        
-        rows.respond_to?("size") ? @size = rows.size : @size = 1
-        rows[0].respond_to?("size") ? @column_size = rows[0].size : @column_size = 1
+        @size = rows.size
+        @column_size = rows[0].size
 
         class_invariant()
-        post_init(rows)
+        post_init(*rows)
     end
 
     def create_hash(rows)
@@ -39,7 +37,6 @@ class GeneralDataStructure
                 new_hash[[i,j]] = col unless col == 0
             end
         end
-
         class_invariant()
         post_create_hash(rows, new_hash)
         new_hash
@@ -47,12 +44,10 @@ class GeneralDataStructure
 
     def each(&block)
         pre_each(&block)
-        (0..size-1).each do |i|
+        (0..@size-1).each do |i|
             yield self.row(i)
         end
         post_each(&block)
-        
-        self.elements
     end
     
     def each_key(&block)
@@ -70,10 +65,10 @@ class GeneralDataStructure
         class_invariant()
 
         row = Array.new()
-        (0..size-1).each do |i|
+        (0..@size-1).each do |i|
             if i == index
-                (0..column_size-1).each do |j|
-                    row[j] = self[i,j]
+                (0..@column_size-1).each do |j|
+                    row << self[i,j]
                 end
             end
         end

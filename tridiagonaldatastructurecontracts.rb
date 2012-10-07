@@ -21,7 +21,7 @@ module TridiagonalDataStructureContracts
         
         assert(self.to_a == rows, "Data created was corrupted. \
                                    Rows input were invalidly processed")
-        assert(@size == rows.size  && @column_size = rows[0].size)
+        assert(@size == rows.size  && @column_size == rows[0].size)
     end
 
 
