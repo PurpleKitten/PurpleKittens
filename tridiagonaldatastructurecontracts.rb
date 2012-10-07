@@ -19,14 +19,6 @@ module TridiagonalDataStructureContracts
         assert(@lower != nil)
         assert(@middle != nil)
         
-        puts self.to_a.to_s
-        puts rows.to_s
-        
-        puts rows.size.to_s
-        puts @size.to_s
-        puts @column_size.to_s
-        puts rows[0].size
-        
         assert(self.to_a == rows, "Data created was corrupted. \
                                    Rows input were invalidly processed")
         assert(@size == rows.size  && @column_size = rows[0].size)
