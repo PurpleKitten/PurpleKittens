@@ -11,7 +11,7 @@ class SparseDelegateFactory
   
     @@delegates = [TridiagonalMatrixDelegate]
 
-    def self.create(*rows, &block)      
+    def self.create(rows, &block)      
         pre_create(rows)
       
         @matrix = self.create_matrix(*rows, &block)

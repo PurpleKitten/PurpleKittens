@@ -17,7 +17,6 @@ module MatrixDelegate
         
         class_invariant
         post_create_matrix(@matrix)
-        
         @matrix
     end
 
@@ -43,7 +42,7 @@ module MatrixDelegate
       class_invariant
       
       result = [obj, @matrix]
-      
+
       post_coerce(result)
       class_invariant
       result

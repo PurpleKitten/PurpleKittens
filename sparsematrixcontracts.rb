@@ -557,12 +557,12 @@ module SparseMatrixContracts
         
       side_length_1 = self.row_size
       side_length_2 = self.column_size
-      side_length_3 = rand(6)
-      side_length_4 = rand(6)
+      side_length_3 = rand(1..6)
+      side_length_4 = rand(1..6)
       
       smatrixA = self
-      smatrixB = SparseMatrix.new(:build, side_length_2,side_length_3) { rand(20) }
-      smatrixC = SparseMatrix.new(:build, side_length_3,side_length_4) { rand(20) }
+      smatrixB = SparseMatrix.new(:build, side_length_2,side_length_3) { rand(1..20) }
+      smatrixC = SparseMatrix.new(:build, side_length_3,side_length_4) { rand(1..20) }
       
       #A(BC)=(AB)C
       assert((smatrixA * smatrixB)  *  smatrixC == smatrixA * ( smatrixB * smatrixC), INVARIANT + "A(BC)=(AB)C") 
@@ -589,8 +589,8 @@ module SparseMatrixContracts
       side_length_2 = self.column_size
             
       smatrixA = self
-      smatrixB = SparseMatrix.new(:build, side_length_1,side_length_2) { rand(20) }
-      smatrixC = SparseMatrix.new(:build, side_length_1,side_length_2) { rand(20) }
+      smatrixB = SparseMatrix.new(:build, side_length_1,side_length_2) { rand(1..20) }
+      smatrixC = SparseMatrix.new(:build, side_length_1,side_length_2) { rand(1..20) }
       
       #A + B = B + A
       assert(smatrixA + smatrixB == smatrixB + smatrixA, INVARIANT + "A + B = B + A")
@@ -602,12 +602,12 @@ module SparseMatrixContracts
       assert(smatrixA - smatrixB == smatrixA + (-1 * smatrixB), INVARIANT + "A-B = A + -B")
       
       if(side_length_1 > 0)
-        smatrixI = SparseMatrix.new(:identity, side_length_1) { rand(20) }
+        smatrixI = SparseMatrix.new(:identity, side_length_1) { rand(1..20) }
         #I=Rowsize*Rowsize
         #Ix = X
         assert(smatrixI * self == self, INVARIANT + "Ix = X")
 
-        smatrixI = SparseMatrix.new(:identity, side_length_2) { rand(20) }
+        smatrixI = SparseMatrix.new(:identity, side_length_2) { rand(1..20) }
         #I=columnsize*columnsize
         #xI = x
         assert(self * smatrixI == self, INVARIANT + "xI = x")

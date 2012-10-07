@@ -11,13 +11,12 @@ class GeneralDataStructure
     attr_reader :column_size
 
     def initialize(*rows)
-        pre_init(*rows)
+        pre_init(rows)
         class_invariant()
         
         #Note that in ruby 1.9.3, a hash
         #keeps the order that you put the
         #elements in
-        
         @elements = self.create_hash(rows)
         
         @size = rows.size
@@ -151,10 +150,8 @@ class GeneralDataStructure
         pre_equals(other)
         class_invariant()
         #temp implementation
-        
-        return false unless other.respond_to?("to_a")
-        
         result = self.to_a == other.to_a
+
         class_invariant()
         post_equals
         

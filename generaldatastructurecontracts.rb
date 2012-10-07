@@ -13,7 +13,7 @@ module GeneralDataStructureContracts
         assert(rows[0] != nil, "Invalid parameters specified to initalize")
         assert(rows[0].respond_to?("[]"), "Rows doesn't respond to []")
         assert(rows[0].respond_to?("size"), "Rows doesn't respond to size")
-        assert(rows[0].size >= 0, "No parameters passed into initialize")
+        assert(rows[0].size > 0, "Rows must not be empty!")
 
         col_size = rows[0].size
 
@@ -137,6 +137,7 @@ module GeneralDataStructureContracts
         class_invariant
         assert(other.respond_to?(:each), "Cannot compare incompatible types.")
         assert(other.respond_to?(:size), "Cannot compare object without size.")
+        assert(other.respond_to?(:to_a), "Cannot compare without to_a!")
     end
     def post_equals()
       class_invariant

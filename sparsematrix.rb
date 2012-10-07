@@ -14,7 +14,7 @@ class SparseMatrix
 
     def initialize(*rows, &block)
         pre_init(rows)
-        @delegate = SparseDelegateFactory.create(*rows, &block)
+        @delegate = SparseDelegateFactory.create(rows, &block)
         @matrix = @delegate.matrix
         post_init()
     end

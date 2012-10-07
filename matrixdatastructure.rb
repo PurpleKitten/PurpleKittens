@@ -10,7 +10,7 @@ class MatrixDataStructure
   
     def self.General(rows)
         MatrixDataStructureContracts.pre_general(rows)   
-        result = GeneralDataStructure.new(rows)
+        result = GeneralDataStructure.new(*rows)
         MatrixDataStructureContracts.post_general(result)
         
         result
@@ -18,7 +18,7 @@ class MatrixDataStructure
 
     def self.Tridiagonal(rows)
         MatrixDataStructureContracts.pre_tridiagonal(rows)
-        result = TridiagonalDataStructure.new(rows)
+        result = TridiagonalDataStructure.new(*rows)
         MatrixDataStructureContracts.post_tridiagonal(result)
         
         result
@@ -26,7 +26,7 @@ class MatrixDataStructure
 
     def self.Diagonal(rows)
         MatrixDataStructureContracts.pre_diagonal(rows)
-        result = DiagonalDataStructure.new(rows)
+        result = DiagonalDataStructure.new(*rows)
         MatrixDataStructureContracts.post_diagonal(result)
         
         result
