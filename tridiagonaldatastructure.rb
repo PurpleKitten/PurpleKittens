@@ -1,7 +1,7 @@
 require './tridiagonaldatastructurecontracts.rb'
 
 class TridiagonalDataStructure
-    
+
     include Enumerable #Have to implement each()
     include TridiagonalDataStructureContracts
 
@@ -11,9 +11,9 @@ class TridiagonalDataStructure
     attr_reader :size
     attr_reader :column_size
 
-    def initialize(rows)
+    def initialize(*rows)
         pre_init(rows)
-      
+
         @upper = []
         @lower = []
         @middle = []
@@ -21,14 +21,13 @@ class TridiagonalDataStructure
         create_data(rows)
         @size = rows.size
         @column_size = rows[0].size
-        
+
         post_init(rows)
-        self
     end
 
     def create_data(rows)
         pre_create_data(rows)
-        
+
         upperxindex = 1
         lowerxindex = -1
 
@@ -44,7 +43,7 @@ class TridiagonalDataStructure
             lowerxindex += 1
             upperxindex += 1           
         end
-        
+
         post_create_data(rows)
 
     end
@@ -70,11 +69,11 @@ class TridiagonalDataStructure
 
         class_invariant
         post_row(index,row)
-        
+
         row
     end
 
-   
+
     def [](i,j)
         pre_square_brackets(i,j)
         class_invariant
@@ -118,7 +117,7 @@ class TridiagonalDataStructure
         class_invariant
 
         trans = self.to_a.transpose
-        
+
         class_invariant
         post_transpose
 
@@ -132,7 +131,7 @@ class TridiagonalDataStructure
         s = "#{self.to_a().to_s}"
 
         class_invariant
-        post_to_s
+        post_to_s(s)
         s
     end
 
@@ -148,13 +147,13 @@ class TridiagonalDataStructure
         class_invariant
 
         e = self.to_a == other.to_a
-        
+
         class_invariant
         post_equals(other)
         e
     end
 
-private
+    private
     def get_diagonal(i,j)
         pre_get_diagonal(i,j)
         class_invariant
@@ -181,5 +180,5 @@ private
 
     end
 
-    
+
 end

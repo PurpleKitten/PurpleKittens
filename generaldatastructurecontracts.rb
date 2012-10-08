@@ -3,13 +3,13 @@ require 'test/unit'
 module GeneralDataStructureContracts
 
     include Test::Unit::Assertions
-    
+
     def pre_init(*rows)
         assert(rows != nil, "Invalid parameters specified to initalize")
         assert(rows.respond_to?("[]"), "Rows wrapper doesn't respond to []")
         assert(rows.respond_to?("size"), "Rows wrapper doesn't respond to size")
         assert(rows.size > 0, "No parameters passed into initialize")
-        
+
         assert(rows[0] != nil, "Invalid parameters specified to initalize")
         assert(rows[0].respond_to?("[]"), "Rows doesn't respond to []")
         assert(rows[0].respond_to?("size"), "Rows doesn't respond to size")
@@ -25,9 +25,9 @@ module GeneralDataStructureContracts
     def post_init(*rows)
         assert(self.to_a == rows, "Data created was corrupted. \
                                    Rows input were invalidly processed")
-        assert(@elements != nil)
-        col_size = rows[0].size
-        assert(@size == rows.size  && @column_size == col_size)
+                                   assert(@elements != nil)
+                                   col_size = rows[0].size
+                                   assert(@size == rows.size  && @column_size == col_size)
     end
 
     def pre_create_hash(rows)
@@ -51,19 +51,19 @@ module GeneralDataStructureContracts
     end
 
     def pre_each(&block)
-      class_invariant
-      assert(block_given?, "Each requires a block to run")
+        class_invariant
+        assert(block_given?, "Each requires a block to run")
     end
     def post_each()
-      class_invariant
+        class_invariant
     end
-    
+
     def pre_each_key(&block)
-      class_invariant
-      assert(block_given?, "Each requires a block to run")
+        class_invariant
+        assert(block_given?, "Each requires a block to run")
     end
     def post_each_key()
-      class_invariant
+        class_invariant
     end
 
     def pre_row(index)
@@ -106,31 +106,31 @@ module GeneralDataStructureContracts
     end
 
     def pre_transpose
-      class_invariant
+        class_invariant
         assert(self.respond_to?(:to_a), "Data must be able to be converted into an array with to_a!")
 
     end
     def post_transpose
-      class_invariant
+        class_invariant
     end
 
     def pre_to_s
-      class_invariant
+        class_invariant
         assert(self.respond_to?(:to_a), "Cannot convert to string.")
     end
     def post_to_s(result)
         assert(!result.nil?, "to_s cannot return a nil value")
         assert(result.is_a?(String), "to_s must return a string value")
-      class_invariant
+        class_invariant
     end
 
     def pre_hash
-      class_invariant
-      #None
+        class_invariant
+        #None
     end
     def post_hash(result)
-      assert(!result.nil?, "Hash cannot return a nil value")
-      class_invariant
+        assert(!result.nil?, "Hash cannot return a nil value")
+        class_invariant
     end
 
     def pre_equals(other)
@@ -139,10 +139,10 @@ module GeneralDataStructureContracts
         assert(other.respond_to?(:size), "Cannot compare object without size.")
         assert(other.respond_to?(:to_a), "Cannot compare without to_a!")
     end
-    def post_equals()
-      class_invariant
+    def post_equals(other)
+        class_invariant
     end
-    
+
     def class_invariant
     end
 

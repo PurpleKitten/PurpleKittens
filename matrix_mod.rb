@@ -17,6 +17,27 @@ class Matrix
         result
     end
 
+    def sparse?
+        #no pre sparse conditions
+        zeros = 0
+        elements = 0
+        self.each do |el|
+            if el == 0
+                zeros += 1
+            else
+                elements += 1
+            end
+        end
+
+        ratio = Float(zeros)/Float(elements)
+
+        if ratio >= 0.3
+            return true
+        else
+            return false
+        end
+        #no post sparse conditions
+    end
 end
 
 

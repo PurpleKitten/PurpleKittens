@@ -22,15 +22,6 @@ module SparseMatrixContracts
     INVARIANT = "Invariant Violated: "
     
     
-    def conditional(position)
-       return if @@override
-      
-       class_invariant if position == @@pre_symbol  
-      yield()
-       class_invariant if position == @@post_symbol
-    
-    end
-    
     def pre_init(rows)           
           assert(!rows.nil?, NIL_PROVIDED)
           assert(rows.is_a?(Array), 'Input rows must be an array.')
@@ -41,87 +32,65 @@ module SparseMatrixContracts
         assert(@delegate.to_a == @matrix.to_a, 'Sparse Matrix not initialized properly.')
     end
 
-    def pre_diagonal?(sm_self)
-      conditional(@@pre_symbol) do
-        assert(sm_self.square?(), SELF_SQUARE)
+    def pre_diagonal?()
+        assert(self.square?(), SELF_SQUARE)
         class_invariant
-      end
     end
     def post_diagonal?()
-      conditional(@@post_symbol) do
-        #None
-      end
     end
     
     def pre_empty?()
-      conditional(@@pre_symbol) do
-        #None
-      end
     end
     def post_empty?()
-      conditional(@@post_symbol) do
-        #None
-      end
     end
 
-    def pre_multiply(sm_self,m)
-      conditional(@@pre_symbol) do
+    def pre_multiply(m)
         assert(!m.nil?, "Sparse matrix to * against cannot be nil")     
         assert(m.respond_to?("multiply") || m.respond_to?("*"), "Unable to multiply on #{m.inspect}")
         
         if(m.respond_to?("multiply"))
-          assert(sm_self.column_size==m.row_size, "Incorrect matrix dimensions: [#{sm_self.row_size},#{sm_self.column_size}] x [#{m.row_size},#{m.column_size}]")
+          assert(self.column_size==m.row_size, "Incorrect matrix dimensions: [#{self.row_size},#{self.column_size}] x [#{m.row_size},#{m.column_size}]")
         end
-      end
     end
-    def post_multiply(sm_self,m, result)
-      conditional(@@post_symbol) do
+    def post_multiply(m, result)
         assert(!result.nil?, NIL_RETURNED)
         
         if(m.respond_to?("multiply"))
-          assert(result.row_size==sm_self.row_size, "Matrix returned has invalid row dimension: Expected-#{sm_self.row_size}, Result: #{result.row_size}")
-          assert(result.column_size==m.column_size, "Matrix returned has invalid column dimension: Expected-#{sm_self.column_size}, Result: #{result.column_size}")
+          assert(result.row_size==self.row_size, "Matrix returned has invalid row dimension: Expected-#{self.row_size}, Result: #{result.row_size}")
+          assert(result.column_size==m.column_size, "Matrix returned has invalid column dimension: Expected-#{self.column_size}, Result: #{result.column_size}")
         end
-      end
     end
     
-    def pre_exponential(sm_self, m)
-      conditional(@@pre_symbol) do
+    def pre_exponential( m)
         assert(!m.nil?, NIL_PROVIDED)     
         assert(m.is_a?(Integer), "Input value must be an integer")
-        assert(sm_self.square?(), SELF_SQUARE)
+        assert(self.square?(), SELF_SQUARE)
             
         if(m <= 0)
-          assert(sm_self.regular?(), "When value provided is less than 0, the matrix must be regular.")
+          assert(self.regular?(), "When value provided is less than 0, the matrix must be regular.")
         end
-      end
       
     end
-    def post_exponential(sm_self, m, result)
-      conditional(@@post_symbol) do
+    def post_exponential( m, result)
         assert(!result.nil?, NIL_RETURNED)
-        assert(sm_self.row_size==result.row_size, "Matrix returned has invalid row dimension: Expected-#{sm_self.row_size}, Result: #{result.row_size}")
-        assert(sm_self.column_size==result.column_size, "Matrix returned has invalid column dimension: Expected-#{sm_self.column_size}, Result: #{result.column_size}")
-      end
+        assert(self.row_size==result.row_size, "Matrix returned has invalid row dimension: Expected-#{self.row_size}, Result: #{result.row_size}")
+        assert(self.column_size==result.column_size, "Matrix returned has invalid column dimension: Expected-#{self.column_size}, Result: #{result.column_size}")
       
     end
     
-    def pre_addition(sm_self, m)
-      conditional(@@pre_symbol) do
+    def pre_addition( m)
         assert(!m.nil?, NIL_PROVIDED)     
         assert(m.respond_to?("plus") || m.respond_to?("+"), "Addition not supported on provided parameter") 
         
         if m.respond_to?("plus")
-          assert(sm_self.row_size==m.row_size, "Matrix provided has invalid row dimension: Expected-#{sm_self.row_size}, Provided: #{m.row_size}")
-          assert(sm_self.column_size==m.column_size, "Matrix provided has invalid column dimension: Expected-#{sm_self.column_size}, Provided: #{m.column_size}")
+          assert(self.row_size==m.row_size, "Matrix provided has invalid row dimension: Expected-#{self.row_size}, Provided: #{m.row_size}")
+          assert(self.column_size==m.column_size, "Matrix provided has invalid column dimension: Expected-#{self.column_size}, Provided: #{m.column_size}")
         end
-      end  
     end
-    def post_addition(sm_self, m, result)
-      conditional(@@post_symbol) do
+    def post_addition( m, result)
         assert(!result.nil?, NIL_RETURNED)
-        assert(result.row_size==sm_self.row_size, "Matrix returned has invalid row dimension: Expected-#{sm_self.row_size}, Result: #{result.row_size}")
-        assert(result.column_size==sm_self.column_size, "Matrix returned has invalid column dimension: Expected-#{sm_self.column_size}, Result: #{result.column_size}")
+        assert(result.row_size==self.row_size, "Matrix returned has invalid row dimension: Expected-#{self.row_size}, Result: #{result.row_size}")
+        assert(result.column_size==self.column_size, "Matrix returned has invalid column dimension: Expected-#{self.column_size}, Result: #{result.column_size}")
         
         if m.respond_to?("plus")
           sumElementsPre1,sumElementsPre2,sumElementsPost = 0, 0, 0
@@ -131,25 +100,21 @@ module SparseMatrixContracts
                 
           assert(sumElementsPre1 + sumElementsPre2 == sumElementsPost, "Pre1 #{sumElementsPre1} + Pre2 #{sumElementsPre2} = Result: #{sumElementsPost}")
         end
-      end
     end
     
-    def pre_subtraction(sm_self, m)
-      conditional(@@pre_symbol) do
+    def pre_subtraction( m)
         assert(!m.nil?, NIL_PROVIDED)     
         assert(m.respond_to?("minus") || m.respond_to?("-"), "Subtraction not supported on provided parameter") 
               
         if m.respond_to?("minus")
-          assert(sm_self.row_size==m.row_size, "Matrix provided has invalid row dimension: Expected-#{sm_self.row_size}, Provided: #{m.row_size}")
-          assert(sm_self.column_size==m.column_size, "Matrix provided has invalid column dimension: Expected-#{sm_self.column_size}, Provided: #{m.column_size}")
+          assert(self.row_size==m.row_size, "Matrix provided has invalid row dimension: Expected-#{self.row_size}, Provided: #{m.row_size}")
+          assert(self.column_size==m.column_size, "Matrix provided has invalid column dimension: Expected-#{self.column_size}, Provided: #{m.column_size}")
         end
-      end
     end
-    def post_subtraction(sm_self, m, result)
-      conditional(@@post_symbol) do
+    def post_subtraction( m, result)
         assert(!result.nil?, NIL_RETURNED)
-        assert(result.row_size==sm_self.row_size, "Matrix returned has invalid row dimension: Expected-#{sm_self.row_size}, Result: #{result.row_size}")
-        assert(result.column_size==sm_self.column_size, "Matrix returned has invalid column dimension: Expected-#{sm_self.column_size}, Result: #{result.column_size}")
+        assert(result.row_size==self.row_size, "Matrix returned has invalid row dimension: Expected-#{self.row_size}, Result: #{result.row_size}")
+        assert(result.column_size==self.column_size, "Matrix returned has invalid column dimension: Expected-#{self.column_size}, Result: #{result.column_size}")
         
         if m.respond_to?("minus")   
           sumElementsPre1,sumElementsPre2,sumElementsPost = 0, 0, 0
@@ -159,332 +124,198 @@ module SparseMatrixContracts
                           
           assert(sumElementsPre1 - sumElementsPre2 == sumElementsPost, "Pre1 #{sumElementsPre1} - Pre2 #{sumElementsPre2} = Result: #{sumElementsPost}")
         end
-      end     
     end  
     
-    def pre_divide(sm_self, m)
-      conditional(@@pre_symbol) do
+    def pre_divide( m)
         assert(!m.nil?, NIL_PROVIDED)          
         assert(m.respond_to?("divide") || m.respond_to?("/"), "Division not supported on provided parameter")
                   
         if m.respond_to?("divide")
-          assert(sm_self.square?(), SELF_SQUARE)
-          assert(sm_self.regular?(), SELF_REGULAR)
-          assert(sm_self.row_size==m.row_size, "Matrix provided has invalid row dimension: Expected-#{sm_self.row_size}, Provided: #{m.row_size}")
-          assert(sm_self.column_size==m.column_size, "Matrix provided has invalid column dimension: Expected-#{sm_self.column_size}, Provided: #{m.column_size}")
+          assert(self.square?(), SELF_SQUARE)
+          assert(self.regular?(), SELF_REGULAR)
+          assert(self.row_size==m.row_size, "Matrix provided has invalid row dimension: Expected-#{self.row_size}, Provided: #{m.row_size}")
+          assert(self.column_size==m.column_size, "Matrix provided has invalid column dimension: Expected-#{self.column_size}, Provided: #{m.column_size}")
         end
-      end
     end
-    def post_divide(sm_self, m, result)
-      conditional(@@post_symbol) do
+    def post_divide( m, result)
         assert(!result.nil?, NIL_RETURNED)
         
         if m.respond_to?("divide")
-          assert(result.row_size==sm_self.row_size, "Matrix provided has invalid row dimension: Expected-#{sm_self.row_size}, Result: #{result.row_size}")
-          assert(result.column_size==sm_self.column_size, "Matrix provided has invalid column dimension: Expected-#{sm_self.column_size}, Result: #{result.column_size}")
+          assert(result.row_size==self.row_size, "Matrix provided has invalid row dimension: Expected-#{self.row_size}, Result: #{result.row_size}")
+          assert(result.column_size==self.column_size, "Matrix provided has invalid column dimension: Expected-#{self.column_size}, Result: #{result.column_size}")
         end
-      end
     end
     
     def pre_equals?()
-      conditional(@@pre_symbol) do
-        #None
-      end
     end
     def post_equals?()
-      conditional(@@post_symbol) do
-        #None
-      end
     end 
     
     def pre_access_ij_element(i,j)
-      conditional(@@pre_symbol) do
-        #None - Wrapper Checked @ Data Structure
-      end
     end 
     def post_access_ij_element(result)
-      conditional(@@post_symbol) do
         assert(!result.nil?, NIL_RETURNED)
-      end
     end
     
     def pre_set_ijk_element(i,j)
-      conditional(@@pre_symbol) do
-        #None - Wrapper Checked @ Data Structure
-      end
     end 
     def post_set_ijk_element(result)
-      conditional(@@post_symbol) do
         assert(!result.nil?, NIL_RETURNED)
-      end
     end
     
     def pre_coerce(m)
-      conditional(@@pre_symbol) do
-        #None
-      end
     end
     def post_coerce(result)
-      conditional(@@post_symbol) do
         assert(!result.nil?, NIL_RETURNED)
-      end
     end
     
-    def pre_determinant(sm_self)
-      conditional(@@pre_symbol) do
-        assert(sm_self.square?(), SELF_SQUARE)
-      end
+    def pre_determinant()
+        assert(self.square?(), SELF_SQUARE)
     end
     def post_determinant(result)
-      conditional(@@post_symbol) do
-        #None
-      end
     end
     
     def pre_empty?()
-      conditional(@@pre_symbol) do
-        #None
-      end
     end
     def post_empty?(result)
-      conditional(@@post_symbol) do
-        #None
-      end
     end
     
     #TODO
     def pre_find_index(args)
-      conditional(@@pre_symbol) do
         assert(args!=nil, NIL_PROVIDED)
         assert(args.size() >=0 && args.size() < 2, "Index")
-      end
     end
     
     def post_find_index(result)
-      conditional(@@post_symbol) do
         assert(!result.nil?, NIL_RETURNED)
-      end
     end    
     
     def pre_hash()
-      conditional(@@pre_symbol) do
-        #None
-      end
     end
     def post_hash(result)
-      conditional(@@post_symbol) do
         assert(result!=null,NIL_RETURNED)
-      end
     end
     
-    def pre_hermitian?(sm_self)
-      conditional(@@pre_symbol) do
-      assert(sm_self.square?(), SELF_SQUARE)
-      end
+    def pre_hermitian?()
+      assert(self.square?(), SELF_SQUARE)
     end
     def post_hermitian?()
-      conditional(@@post_symbol) do
-        #None
-      end
     end
     
-    def pre_inverse(sm_self)
-      conditional(@@pre_symbol) do
-        assert(sm_self.square?(), SELF_SQUARE)
-        assert(sm_self.regular?(), SELF_REGULAR)
-      end
+    def pre_inverse()
+        assert(self.square?(), SELF_SQUARE)
+        assert(self.regular?(), SELF_REGULAR)
     end
-    def post_inverse(sm_self, result)
-      conditional(@@post_symbol) do
-        identity = sm_self.identity(sm_self.row_size())
-        assert(result * sm_self == identity, "Invalid Inverse detected")
-        assert(sm_self * result  == identity, "Invalid Inverse detected")
-      end     
+    def post_inverse( result)
+        identity = Matrix.identity(self.row_size())
+        assert(result * self == identity, "Invalid Inverse detected")
+        assert(self * result  == identity, "Invalid Inverse detected")
     end
     
     def pre_lower_triangular?()
-      conditional(@@pre_symbol) do
-        #None
-      end
     end
     def post_lower_triangular?()
-      conditional(@@post_symbol) do
-        #None
-      end
     end
     
-    def pre_normal?(sm_self)
-      conditional(@@pre_symbol) do
-        assert(sm_self.square?(), SELF_SQUARE)
-      end
+    def pre_normal?()
+        assert(self.square?(), SELF_SQUARE)
     end
     def post_normal?()
-      conditional(@@post_symbol) do
-        #None
-      end
     end
     
-    def pre_orthogonal?(sm_self)
-      conditional(@@pre_symbol) do
-        assert(sm_self.square?(), SELF_SQUARE)
-      end
+    def pre_orthogonal?()
+        assert(self.square?(), SELF_SQUARE)
     end
     def post_orthogonal?()
-      conditional(@@post_symbol) do
-        #None
-      end
     end
     
-    def pre_permutation?(sm_self)
-      conditional(@@pre_symbol) do
-        assert(sm_self.square?(), SELF_SQUARE)
-      end
+    def pre_permutation?()
+        assert(self.square?(), SELF_SQUARE)
     end
     def post_permutation?()
-      conditional(@@post_symbol) do
-        #None
-      end
     end
     
     def pre_rank()
-      conditional(@@pre_symbol) do
-        #None
-      end
     end
-    def post_rank(sm_self,result)
-      conditional(@@post_symbol) do
+    def post_rank(result)
         assert(!result.nil?, NIL_RETURNED)
-        assert(result.to_i < [sm_self.row_size(), sm_self.column_size()].min, "Rank determined greater than max possible value.")
+        assert(result.to_i <= row_size, "Rank determined greater than max possible value.")
         assert(result.to_i >= 0, "Rank determined was less than zero.")
-      end
     end
       
-    def pre_regular?(sm_self)
-      conditional(@@pre_symbol) do
-        assert(sm_self.square?(), SELF_SQUARE)
-      end
+    def pre_regular?()
+        assert(self.square?(), SELF_SQUARE)
     end
     def post_regular?(result)
-      conditional(@@post_symbol) do
-        #None
-      end
     end
       
   def pre_round?()
-    conditional(@@pre_symbol) do
-      assert(sm_self.square?(), SELF_SQUARE)
-    end
+      assert(self.square?(), SELF_SQUARE)
   end
-  def post_round?(sm_self, result)
-    conditional(@@post_symbol) do
+  def post_round?( result)
       assert(!result.nil?, NIL_RETURNED)
-      assert(result.row_size==sm_self.row_size, "Matrix size should not have changed during rounding.")
-      assert(result.column_size==sm_self.column, "Matrix size should not have changed during rounding.")
-    end
+      assert(result.row_size==self.row_size, "Matrix size should not have changed during rounding.")
+      assert(result.column_size==self.column, "Matrix size should not have changed during rounding.")
   end
     
     def pre_row_size()
-      conditional(@@pre_symbol) do
-        #None
-      end
     end
     def post_row_size(result)
-      conditional(@@post_symbol) do
         assert(result!=nil, NIL_RETURNED)
         assert(result >= 0, "Row length must be greater than zero.")
         assert(result == @matrix.row_size, "Unexpected row size returned.")
-      end
       
     end
     
     def pre_column_size()
-      conditional(@@pre_symbol) do
-        #None
-      end
     end
     def post_column_size(result)
-      conditional(@@post_symbol) do
         assert(result!=nil, NIL_RETURNED)
         assert(result >= 0, "Row Column must be greater than zero")
         assert(result == @matrix.column_size, "Unexpected column size returned")
-      end
     end
     
-    def pre_singular?(sm_self)
-      conditional(@@pre_symbol) do
-        assert(sm_self.square?(), SELF_SQUARE)
-      end
+    def pre_singular?()
+        assert(self.square?(), SELF_SQUARE)
     end
     def post_singular?()
-      conditional(@@post_symbol) do
-        #None
-      end
     end
     
     def pre_square?()
-      conditional(@@pre_symbol) do
-        #None
-      end
     end
     def post_square?()
-      conditional(@@post_symbol) do
-        #None
-      end
     end
     
-    def pre_symmetric?(sm_self)
-      conditional(@@pre_symbol) do
-        assert(sm_self.square?(), SELF_SQUARE)
-      end
+    def pre_symmetric?()
+        assert(self.square?(), SELF_SQUARE)
     end
     def post_symmetric?()
-      conditional(@@post_symbol) do
-        #None
-      end
     end
     
     def pre_to_a()
-      conditional(@@pre_symbol) do
-        #None
-      end
     end
     def post_to_a(result)
-      conditional(@@post_symbol) do
         assert(result!=nil, NIL_RETURNED)
         assert(result.is_a?(Array), "Returned value must be an Array")
-      end
     end
     
     def pre_to_s()
-      conditional(@@pre_symbol) do
-        #None
-      end
     end
     def post_to_s(result)
-      conditional(@@post_symbol) do
         assert(result!=nil, NIL_RETURNED)
         assert(result.is_a?(String), "Returned value must be a String")
-      end
     end
       
-    def pre_trace(sm_self)
-      conditional(@@pre_symbol) do
-        assert(sm_self.square?(), SELF_SQUARE)
-      end
+    def pre_trace()
+        assert(self.square?(), SELF_SQUARE)
     end
     def post_trace(result)
-      conditional(@@post_symbol) do
         assert(result != nil, NIL_RETURNED)
-      end
     end
     
     def pre_transpose()
-      conditional(@@pre_symbol) do
-        #None
-      end
     end
-    def post_transpose(sm_self, result)
-      conditional(@@post_symbol) do
+    def post_transpose( result)
         assert(!result.nil?, NIL_RETURNED)
         
         sumElementsPre,sumElementsPost = 0, 0
@@ -492,58 +323,36 @@ module SparseMatrixContracts
         result.each(:all){ |e| sumElementsPost += e }
           
         assert(sumElementsPre == sumElementsPost, "Pre: #{sumElementsPre}, Post: #{sumElementsPost}")
-      end
     end
     
-    def pre_unitary?(sm_self)
-      conditional(@@pre_symbol) do
-        assert(sm_self.square?(), SELF_SQUARE)
-      end
+    def pre_unitary?()
+        assert(self.square?(), SELF_SQUARE)
     end
     def post_unitary?()
-      conditional(@@post_symbol) do
-        #None
-      end
     end
     
     def pre_upper_triangular?()
-      conditional(@@pre_symbol) do
-        #None
-      end
     end
     def post_upper_triangular?()
-      conditional(@@post_symbol) do
-        #None
-      end
     end
 
     def pre_zero?()
-      conditional(@@pre_symbol) do
-        #None
-      end
     end
     def post_zero?()
-      conditional(@@post_symbol) do
-        #None
-      end
     end
     
     def pre_delegate_method(method_name)
-      conditional(@@pre_symbol) do
         assert(!method_name.nil?, "Provided method for delegation cannot be nil")
         assert(method_name.respond_to?("to_s"), "Provided method to delegate (by name of method) must respond to to_s")
         assert(!method_name.to_s.empty?, "to_s of method name cannot be empty")  
-      end
     end
     
     def post_delegate_method()
-      conditional(@@post_symbol) do
-         #None
-      end
     end
 
     
     def class_invariant
+      return if @@override
       return if @@override_class_invariants
       
       #TODO Might need to caught exceptions because of this (when its true we aren't running pre/post conditions 
