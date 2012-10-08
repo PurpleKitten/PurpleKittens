@@ -66,7 +66,18 @@ module GeneralMatrixDelegateContracts
       class_invariant
     end
     
+    def pre_each_sparse(&block)
+      class_invariant
+      assert(block_given?)
+      assert(@matrixData.respond_to?("each_sparse"), "Delegate data structure must respond to each_sparse")
+    end
+    
+    def post_each_sparse(&block)
+      class_invariant
+    end
+    
     def class_invariant
       assert(!dataStructure.nil?)
+      assert(@matrix.to_a == @matrixData.to_a)
     end
 end

@@ -52,6 +52,7 @@ module MatrixDelegateContracts
     end
     
     def class_invariant
+      @matrix.to_a == @matrixData.to_a
     end
     
 end

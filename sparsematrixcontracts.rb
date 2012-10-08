@@ -349,6 +349,23 @@ module SparseMatrixContracts
     
     def post_delegate_method()
     end
+    
+    def pre_each(which, &block)
+      assert(!which.nil?)
+      matrix_each_options = [:all, :diagonal, :off_diagonal, :lower , :strict_lower, :strict_upper, :upper]
+      assert(matrix_each_options.include?(which))
+      
+    end
+    
+    def post_each()   
+    end
+    
+    def pre_each_sparse(&block)
+      assert(block_given?)
+    end
+    
+    def post_each_sparse()
+    end
 
     
     def class_invariant

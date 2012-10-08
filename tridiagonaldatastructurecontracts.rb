@@ -19,6 +19,9 @@ module TridiagonalDataStructureContracts
         assert(@lower != nil)
         assert(@middle != nil)
         
+        puts rows.to_a.to_s
+        puts self.to_a.to_s
+        
         assert(self.to_a == rows, "Data created was corrupted. \
                                    Rows input were invalidly processed")
         assert(@size == rows.size  && @column_size == rows[0].size)
@@ -50,8 +53,21 @@ module TridiagonalDataStructureContracts
         assert(!@middle.empty?, "Datastructure not created properly!")
     end
     def pre_row(index)
+      class_invariant
+      assert(index.is_a?(Integer), "Index must be an integer.")
+      assert(index < @size || index >= 0, "Index out of bounds.")
     end
     
     def post_row(index,row)
+      assert(row.size == @column_size, "Invalid row created from index.")
+      class_invariant
     end
+    
+    def pre_each_sparse(&block)
+      assert(block_given?)
+    end
+    
+    def post_each_sparse()   
+    end
+    
 end

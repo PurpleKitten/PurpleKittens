@@ -46,8 +46,7 @@ module GeneralDataStructureContracts
                                                     sparse matrix!")
                 end
             end
-        end
-        class_invariant        
+        end     
     end
 
     def pre_each(&block)
@@ -55,6 +54,14 @@ module GeneralDataStructureContracts
         assert(block_given?, "Each requires a block to run")
     end
     def post_each()
+        class_invariant
+    end
+    
+    def pre_each_sparse(&block)
+        class_invariant
+        assert(block_given?, "Each requires a block to run")
+    end
+    def post_each_sparse()
         class_invariant
     end
 
@@ -110,7 +117,16 @@ module GeneralDataStructureContracts
         assert(self.respond_to?(:to_a), "Data must be able to be converted into an array with to_a!")
 
     end
-    def post_transpose
+    def post_transpose(trans)
+        assert(!trans.nil?, "Result of transpose cannot be nil")
+        
+        sum_result = 0
+        trans.to_a.each { |a| sum_result+=a.inject(:+) }
+        
+        sum_original = 0
+        self.to_a.each { |a| sum_original+=a.inject(:+) }  
+          
+        assert(sum_result == sum_original)
         class_invariant
     end
 
@@ -125,12 +141,10 @@ module GeneralDataStructureContracts
     end
 
     def pre_hash
-        class_invariant
         #None
     end
     def post_hash(result)
         assert(!result.nil?, "Hash cannot return a nil value")
-        class_invariant
     end
 
     def pre_equals(other)
@@ -144,6 +158,9 @@ module GeneralDataStructureContracts
     end
 
     def class_invariant
+      assert(!@elements.nil?)
+      assert(@size > 0)
+      assert(@column_size > 0)
     end
 
 end

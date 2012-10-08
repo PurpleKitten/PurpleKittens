@@ -136,6 +136,8 @@ class TridiagonalDataStructure
     end
 
     def each_sparse(&block)
+        pre_each_sparse(&block)
+        class_invariant
         @upper.each do |el|
             yield el
         end
@@ -145,6 +147,8 @@ class TridiagonalDataStructure
         @lower.each do |el|
             yield el
         end
+        class_invariant
+        post_each_sparse()
         return @upper+@middle+@lower
     end
 

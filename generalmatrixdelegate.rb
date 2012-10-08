@@ -44,6 +44,14 @@ class GeneralMatrixDelegate
 
         post_hash
     end
+    
+    def each_sparse(&block)
+      pre_each_sparse(&block)
+      result = @matrixData.each_sparse(&block)
+      post_each_sparse
+      
+      result
+    end
 
     def ==(other)
         pre_equals?()

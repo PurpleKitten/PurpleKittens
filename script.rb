@@ -6,8 +6,10 @@
  
  
  
-blah = SparseMatrix.new([[1,2,3],[1,2,3],[1,2,3]])
+#blah = SparseMatrix.new([[1,2,3],[1,2,3],[1,2,3]])
 
+blah = SparseMatrix.new([[1,2,0],[1,2,3],[0,2,3]])
+  
 #Zero Matrices are broken
 #blah = SparseMatrix.new(:empty, 0)
 #blah = SparseMatrix.new(:empty, 0, 0)
@@ -15,8 +17,8 @@ blah = SparseMatrix.new([[1,2,3],[1,2,3],[1,2,3]])
 #blah = SparseMatrix.new(:empty, 0, 3)
 
 puts blah.to_s
+blah.each_sparse() {|x| puts x}
 
-puts "CREATED"
 
 puts (blah + blah).to_s
 puts (blah + 5).to_s

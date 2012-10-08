@@ -14,7 +14,12 @@ module MatrixModContracts
     def post_replace_structure(struct, result)
         assert(struct == result, "The data structure was not replaced successfully")
     end
-
-    def invariant
+    
+    def pre_sparse?()
+    end
+    
+    def post_sparse?(result)
+      assert(!result.nil?)
+      assert(result == true || result == false)
     end
 end

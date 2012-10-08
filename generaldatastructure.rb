@@ -12,7 +12,6 @@ class GeneralDataStructure
 
     def initialize(*rows)
         pre_init(rows)
-        class_invariant()
 
         #Note that in ruby 1.9.3, a hash
         #keeps the order that you put the
@@ -22,13 +21,11 @@ class GeneralDataStructure
         @size = rows.size
         @column_size = rows[0].size
 
-        class_invariant()
         post_init(*rows)
     end
 
     def create_hash(rows)
         pre_create_hash(rows)
-        class_invariant()
 
         new_hash = Hash.new
         rows.each_with_index do |row,i|
@@ -36,26 +33,28 @@ class GeneralDataStructure
                 new_hash[[i,j]] = col unless col == 0
             end
         end
-        class_invariant()
         post_create_hash(rows, new_hash)
         new_hash
     end
 
     def each(&block)
         pre_each(&block)
+        class_invariant()
         (0..@size-1).each do |i|
             yield self.row(i)
         end
+        class_invariant()
         post_each(&block)
     end
 
-    def each_key(&block)
-        pre_each_key(&block)
-        @elements.each_key do
-            yield
+    def each_sparse(&block)
+        pre_each_sparse(&block)
+        class_invariant()
+        @elements.each_key do |key|
+            yield(@elements[[key[0], key[1]]])
         end
-
-        post_each_key()       
+        class_invariant()
+        post_each_sparse()       
         self.elements
     end
 
@@ -123,7 +122,7 @@ class GeneralDataStructure
         trans = self.to_a().transpose
 
         class_invariant()
-        post_transpose
+        post_transpose(trans)
         trans
     end
 

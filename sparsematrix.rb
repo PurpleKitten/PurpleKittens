@@ -400,22 +400,27 @@ class SparseMatrix
         result
     end
 
-    def each_(*args, &block)
-        #pre_each()
-        result = delegate_method(__method__,*args, &block)
-        #post_each()
+    def each_sparse(&block)
+        pre_each_sparse(&block)
+        class_invariant
+        result = @delegate.each_sparse(&block)
+        class_invariant
+        post_each_sparse()
 
         result
     end
 
     def each(which = :all, &block)
-        #pre_each()
-        @matrix.each(which, &block)
-        #post_each()
+        pre_each(which, &block)
+        class_invariant
+        result = @matrix.each(which, &block)
+        class_invariant
+        post_each()
 
-        self
+        result
     end
 
+    private
     def delegate_method(method_name, *args, &block)
 
         pre_delegate_method(method_name)
@@ -423,7 +428,7 @@ class SparseMatrix
         #See method_missing in matrixdelegate.rb
         result = @delegate.send(method_name, *args, &block)
 
-        if result.respond_to?(:determinant)
+        if result.respond_to?("sparse?")
             if result.sparse?
                 result = to_sparse_matrix(result)
             end
@@ -433,5 +438,7 @@ class SparseMatrix
 
         result
     end
+    
+
 
 end

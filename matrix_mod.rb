@@ -18,7 +18,7 @@ class Matrix
     end
 
     def sparse?
-        #no pre sparse conditions
+        pre_sparse?()
         zeros = 0
         elements = 0
         self.each do |el|
@@ -29,14 +29,24 @@ class Matrix
             end
         end
 
+        if(elements == 0) 
+          if(zeros > 0)
+            result = true
+          else
+            result = false
+          end
+        end
+        
         ratio = Float(zeros)/Float(elements)
 
         if ratio >= 0.3
-            return true
+          result = true
         else
-            return false
+          result = false
         end
-        #no post sparse conditions
+        post_sparse?(result)
+        
+        result
     end
 end
 

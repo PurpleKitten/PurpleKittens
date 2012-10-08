@@ -14,6 +14,11 @@ module SparseDelegateFactoryContracts
   def post_create(result)
     assert(!result.nil?, "Result cannot be nil")
     assert(!@matrix.nil?, "Result cannot be nil")
+    assert(result.respond_to?("to_s"), "Delegate must respond to to_s")
+    assert(result.respond_to?("=="), "Delegate must respond to ==")
+    assert(result.respond_to?("hash"), "Delegate must respond to hash")
+    assert(result.respond_to?("coerce"), "Delegate must respond to coerce")
+    assert(result.respond_to?("each_sparse"), "Delegate must respond to each_sparse")
   end
   
   def pre_determine_delegate(rows)
