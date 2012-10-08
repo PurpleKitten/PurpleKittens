@@ -135,6 +135,19 @@ class TridiagonalDataStructure
         s
     end
 
+    def each_sparse(&block)
+        @upper.each do |el|
+            yield el
+        end
+        @middle.each do |el|
+            yield el
+        end
+        @lower.each do |el|
+            yield el
+        end
+        return @upper+@middle+@lower
+    end
+
     def inspect
         to_s
     end
