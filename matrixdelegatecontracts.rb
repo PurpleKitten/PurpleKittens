@@ -46,8 +46,8 @@ module MatrixDelegateContracts
     end
     
     def post_scalar_operation(result_matrix)    
-      assert(@matrix.row_size == result_matrix.row_size)
-      assert(@matrix.column_size == result_matrix.column_size)
+      assert(@matrix.row_size == result_matrix.row_size,"Resulting matrix has invalid row size.")
+      assert(@matrix.column_size == result_matrix.column_size,"Resulting matrix has invalid column size.")
       class_invariant
     end
     

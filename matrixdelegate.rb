@@ -51,10 +51,13 @@ module MatrixDelegate
     private
     def scalar_operation(&block)
         pre_scalar_operation(&block)
-        result_matrix = SparseMatrix.new(self.to_a)              
-        @matrixData.elements.each_key do |key|
-            result_matrix[key[0], key[1]] = yield(self[key[0], key[1]]).to_i
+        result_matrix = self.to_a
+        @matrixData.each_with_index do |row, i|
+            row.each_with_index do |col, j|
+                result_matrix[i][j] = yield(col).to_i
+            end
         end
+        result_matrix = SparseMatrix.new(result_matrix)
 
         post_scalar_operation(result_matrix)               
         result_matrix
