@@ -1,4 +1,3 @@
-require './generaldatastructurecontracts.rb'
 require 'test/unit'
 
 module TridiagonalDataStructureContracts

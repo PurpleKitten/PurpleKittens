@@ -1,4 +1,4 @@
-require './generaldatastructurecontracts.rb'
+require_relative '../contracts/generaldatastructurecontracts'
 require 'test/unit'
 
 #This is a general matrix data structure

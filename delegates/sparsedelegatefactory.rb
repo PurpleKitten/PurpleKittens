@@ -1,6 +1,6 @@
-require './tridiagonaldelegate.rb'
-require './generalmatrixdelegate.rb'
-require './sparsedelegatefactorycontracts.rb'
+require_relative 'tridiagonaldelegate'
+require_relative 'generalmatrixdelegate'
+require_relative '../contracts/sparsedelegatefactorycontracts'
 require 'test/unit'
 
 

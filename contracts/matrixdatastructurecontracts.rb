@@ -1,4 +1,3 @@
-require './matrixdatastructure.rb'
 require 'test/unit'
 
 module MatrixDataStructureContracts

@@ -1,8 +1,8 @@
-require './matrix_mod.rb'
-require './matrixconvert.rb'
-require './sparsematrixcontracts.rb'
+require_relative 'matrix_mod'
+require_relative 'utils/matrixconvert'
+require_relative 'contracts/sparsematrixcontracts'
 require 'test/unit'
-require './sparsedelegatefactory.rb'
+require_relative 'delegates/sparsedelegatefactory'
 
 class SparseMatrix
 

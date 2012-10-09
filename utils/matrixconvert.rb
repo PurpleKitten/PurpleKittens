@@ -1,6 +1,6 @@
-require './sparsematrix.rb'
-require './matrixconvertcontracts.rb'
-require './matrix.rb'
+require_relative '../sparsematrix'
+require_relative '../contracts/matrixconvertcontracts'
+require_relative '../matrix'
 require 'test/unit'
 
 module MatrixConvert

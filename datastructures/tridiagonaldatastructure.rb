@@ -1,4 +1,4 @@
-require './tridiagonaldatastructurecontracts.rb'
+require_relative '../contracts/tridiagonaldatastructurecontracts'
 
 class TridiagonalDataStructure
 

@@ -1,4 +1,6 @@
+require 'test/unit'
 module MatrixModContracts
+    include Test::Unit::Assertions
     
     def pre_replace_structure(struct)
       

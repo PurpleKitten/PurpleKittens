@@ -1,5 +1,5 @@
-require './matrix.rb'
-require './matrix_modcontracts.rb'
+require_relative 'matrix'
+require_relative 'contracts/matrix_modcontracts'
 require 'test/unit'
 
 class Matrix

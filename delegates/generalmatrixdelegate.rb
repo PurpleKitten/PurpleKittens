@@ -1,7 +1,7 @@
-require './matrix_mod.rb'
-require './matrixdatastructure.rb'
-require './matrixdelegate.rb'
-require './generalmatrixdelegatecontracts.rb'
+require_relative '../matrix_mod'
+require_relative '../datastructures/matrixdatastructure'
+require_relative 'matrixdelegate'
+require_relative '../contracts/generalmatrixdelegatecontracts'
 require 'test/unit'
 
 class GeneralMatrixDelegate

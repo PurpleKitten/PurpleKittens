@@ -1,5 +1,5 @@
-require './matrixdelegatecontracts.rb'
-require './matrixdatastructure.rb'
+require_relative '../contracts/matrixdelegatecontracts'
+require_relative '../datastructures/matrixdatastructure'
 
 module MatrixDelegate
 

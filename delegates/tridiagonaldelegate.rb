@@ -1,7 +1,7 @@
-require './matrix_mod.rb'
-require './matrixdatastructure.rb'
-require './tridiagonaldelegatecontracts.rb'
-require './matrixdelegate.rb'
+require_relative '../matrix_mod'
+require_relative '../datastructures/matrixdatastructure'
+require_relative '../contracts/tridiagonaldelegatecontracts'
+require_relative 'matrixdelegate'
 
 class TridiagonalMatrixDelegate
 

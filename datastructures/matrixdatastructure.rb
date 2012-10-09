@@ -1,6 +1,6 @@
-require './generaldatastructure.rb'
-require './tridiagonaldatastructure.rb'
-require './matrixdatastructurecontracts.rb'
+require_relative 'generaldatastructure'
+require_relative 'tridiagonaldatastructure'
+require_relative '../contracts/matrixdatastructurecontracts'
 
 #DataStructure factory
 class MatrixDataStructure

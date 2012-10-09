@@ -1,6 +1,6 @@
- require 'sparsematrix'
- require 'matrix'
- require 'generalmatrixdelegate.rb'
+ require_relative 'sparsematrix'
+ require_relative 'matrix'
+ require_relative 'delegates/generalmatrixdelegate.rb'
 
 #delegate = GeneralMatrixDelegate.new();
  
