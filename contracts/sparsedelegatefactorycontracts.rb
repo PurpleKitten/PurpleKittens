@@ -29,6 +29,16 @@ module SparseDelegateFactoryContracts
     assert(!type.nil?, "Input arguments cannot be nil")
   end
   
+  def pre_explicit_delegate(rows)
+    assert(!rows.nil?, "Input arguments cannot be nil")
+    assert(rows.respond_to?("size"), "Incorrect argument provided")
+    assert(rows.respond_to?("[]"), "Incorrect argument provided")
+    assert(rows.respond_to?("delete_at"), "Incorrect argument provided")
+    assert(rows.size > 0, "Incorrect argument provided")
+  end
+  def post_explicit_delegate()
+  end
+  
   def pre_array_contains_arrayables(container)
     assert(!container.nil?)
     assert(container.respond_to?("to_a"))

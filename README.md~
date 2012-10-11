@@ -6,5 +6,9 @@ TODO
 -Exceptions
 -5+Matrix
 
-Changes:
-Fixed Trig
+Changes:\
+
+i-2>=j
+
+Factory:
+pre_determine_delegate(rows, *parameters)

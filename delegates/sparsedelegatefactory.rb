@@ -13,9 +13,10 @@ class SparseDelegateFactory
 
     def self.create(rows, &block)      
         pre_create(rows)
-      
+        
         @matrix = self.create_matrix(*rows, &block)
         type = self.determine_delegate(@matrix.to_a)
+          
         result = type.new(@matrix)
         
         post_create(result)
@@ -23,12 +24,13 @@ class SparseDelegateFactory
         result
         
     end
-
+   
+    
     def self.determine_delegate(rows)
 
         pre_determine_delegate(rows)
         type = nil
-
+        
         @@delegates.each do |del|
             type = del.check(rows)          
             break if !type.nil?           
@@ -44,6 +46,7 @@ class SparseDelegateFactory
     end
     
     private  
+    
     def self.array_contains_arrayables(container)
         
       pre_array_contains_arrayables(container)

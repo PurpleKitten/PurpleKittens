@@ -21,7 +21,7 @@ class TridiagonalDataStructure
         create_data(rows)
         @size = rows.size
         @column_size = rows[0].size
-
+        
         post_init(rows)
     end
 
@@ -119,7 +119,7 @@ class TridiagonalDataStructure
         trans = self.to_a.transpose
 
         class_invariant
-        post_transpose
+        post_transpose(trans)
 
         trans
     end

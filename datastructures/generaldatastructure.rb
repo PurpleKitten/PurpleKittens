@@ -119,7 +119,7 @@ class GeneralDataStructure
         pre_transpose
         class_invariant()
 
-        trans = self.to_a().transpose
+        trans = self.to_a().transpose()
 
         class_invariant()
         post_transpose(trans)

@@ -23,47 +23,34 @@ class TridiagonalMatrixDelegate
     end
 
     def self.check(rows)
-      
-      #Invariants returning corrupt data where tridiagnals are attempted to be created when they shouldn't
-      #Didn't have time to debug issue  
-      return nil
-      
-      
       TridiagonalMatrixDelegateContracts.pre_check(rows)
-        #insert processing here
-        #return TridiagonalMatrixDelegate
-
+        
+        first_param = rows[0]
+        
+        if(!first_param.respond_to?("size") or !first_param.respond_to?("each_with_index"))
+          return nil
+        end 
+      
         if rows.size == rows[0].size and rows.size > 2
 
-            start = -1
-            finish = 1
-            check = []
             isTridiag = true
             rows.each_with_index do |row,i|
-
-                if !isTridiag
-                    break
+              break unless isTridiag
+              
+              if(!first_param.respond_to?("each_with_index"))
+                return nil
+              end 
+              
+              row.each_with_index do |value, j|
+                break unless isTridiag
+                
+                if(i - 2 >= j or j - 2 >= i)
+                  isTridiag = false unless value == 0
                 end
-
-                if finish >= row.size
-                    check = row - row[start..row.size-1]
-                elsif start < 0
-                    check = row - row[0..finish]
-                else
-                    check = row - row[start..finish]
-                end
-
-                check.each do |el|
-                    if el != 0
-                        isTridiag = false
-                    end
-                end
-
-                start += 1
-                finish += 1
-            end
+              end
+            end              
         end
-
+        
         result = nil
         result = TridiagonalMatrixDelegate if isTridiag
 

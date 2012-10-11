@@ -453,10 +453,7 @@ module SparseMatrixContracts
         assert((smatrixA * smatrixB).determinant() == smatrixA.determinant() * smatrixB.determinant(), INVARIANT + "det(AB)=det(A)det(B)")
         
         if(self.regular?())
-    
-          #A / B = A (/B)
-          assert(smatrixA / smatrixB = smatrixA * (smatrixB.inverse()), INVARIANT + "A \/ B = A (\/B)")
-          
+           
           #AA-1 = A-1A = I  
           assert(smatrixA * smatrixA.inverse == smatrixI, INVARIANT + "AA-1 = A-1A = I")
           assert(smatrixA.inverse * smatrixA == smatrixI, INVARIANT + "AA-1 = A-1A = I")
@@ -470,6 +467,9 @@ module SparseMatrixContracts
           if(smatrixB.regular?())
             #(AB)^-1 =  B^-1A^-1         
             assert((smatrixA * smatrixB).inverse() == smatrixB.inverse() * smatrixA.inverse(), INVARIANT + "(AB)^-1 =  B^-1A^-1")
+          
+            #A / B = A (/B)
+            assert(smatrixA / smatrixB = smatrixA * (smatrixB.inverse()), INVARIANT + "A \/ B = A (\/B)")
           end 
           
         end     
