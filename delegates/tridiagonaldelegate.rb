@@ -76,7 +76,6 @@ class TridiagonalMatrixDelegate
     def ==(other)
         pre_equals?(other)
 
-        #temp impl
         if(other.respond_to?("to_a"))
             result = @matrix.to_a == other.to_a
         else

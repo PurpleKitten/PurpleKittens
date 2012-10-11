@@ -6,19 +6,20 @@
  
  
  
-blah = SparseMatrix.new([[1,2,3],[1,2,3],[1,2,3]])
-
-#blah = SparseMatrix.new([[1,2,0],[1,2,3],[0,2,3]])
+blah = SparseMatrix.new([[2,0,-1],[-3,0,2],[-2,-1,0]])
  
 puts blah.to_s
-blah.each_sparse() {|x| puts x}
-
-
 puts (blah + blah).to_s
 #puts (blah + 5).to_s
 puts (blah - blah).to_s
-
 puts (blah * blah).to_s
+puts (blah ** 3).to_s
+puts (blah / blah).to_s
+puts (blah == blah).to_s
+puts (blah === blah).to_s
+puts (blah[0,0]).to_s
+puts blah.inverse().to_s
+puts blah.coerce(nil).to_s
 
 
 #hmm - can we fix this?
@@ -39,7 +40,21 @@ puts blah.orthogonal?()
 puts blah.symmetric?()
 puts blah.unitary?()
 puts blah.determinant() 
-
+puts blah.diagonal?()
+puts blah.empty?()
+puts blah.hermitian?()
+puts blah.lower_triangular?()
+puts blah.normal?()
+puts blah.permutation?()
+puts blah.rank()
+puts blah.row_size()
+puts blah.column_size()
+puts blah.square?()
+puts blah.symmetric?()
+puts blah.trace()
+puts blah.transpose()
+puts blah.unitary?()
+puts blah.upper_triangular?()
   
 #blah = SparseMatrix.new([1,2,3],[1,2,3],[1,2,3])
 #blah = SparseMatrix.new([[1,2,3]])

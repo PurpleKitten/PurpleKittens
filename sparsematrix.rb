@@ -16,8 +16,11 @@ class SparseMatrix
 
     def initialize(*rows, &block)
         pre_init(rows)
-        @delegate = SparseDelegateFactory.create(rows, &block)
-        @matrix = @delegate.matrix
+        
+        exception_handler() do
+          @delegate = SparseDelegateFactory.create(rows, &block)
+          @matrix = @delegate.matrix
+        end
         post_init()
     end
 
@@ -99,7 +102,7 @@ class SparseMatrix
     def [](i,j)
         pre_access_ij_element(i,j)
         class_invariant
-        result = @matrix[i,j]
+        result = exception_handler() { @matrix[i,j] }
         class_invariant
         post_access_ij_element(result)
 
@@ -109,7 +112,7 @@ class SparseMatrix
     def []=(i,j,k)
         pre_set_ijk_element(i,j)
         class_invariant
-        result = @matrix.get_rows()[i,j]=k
+        result = exception_handler() { @matrix.get_rows()[i,j]=k }
         class_invariant
         post_set_ijk_element(result)
 
@@ -119,7 +122,7 @@ class SparseMatrix
     def coerce(m)
         pre_coerce(m)
         class_invariant
-        result = @delegate.send(__method__, m)
+        result = exception_handler() { @delegate.send(__method__, m) }
         class_invariant
         post_coerce(result)
 
@@ -147,22 +150,12 @@ class SparseMatrix
         result
     end
 
-    def eigensystem()
-        pre_eigensystem()
-        class_invariant
-        result = delegate_method(__method__)
-        class_invariant
-        post_eigensystem(result)
-
-        result
-    end
-
     def empty?
         pre_empty?()
         class_invariant
         result = delegate_method(__method__)
         class_invariant
-        post_empty?()
+        post_empty?(result)
 
         result
     end
@@ -223,16 +216,6 @@ class SparseMatrix
         result = delegate_method(__method__)
         class_invariant
         post_lower_triangular?()
-
-        result
-    end
-
-    def lup()
-        pre_lup()
-        class_invariant
-        result = delegate_method(__method__)
-        class_invariant
-        post_lup()
 
         result
     end
@@ -403,7 +386,7 @@ class SparseMatrix
     def each_sparse(&block)
         pre_each_sparse(&block)
         class_invariant
-        result = @delegate.each_sparse(&block)
+        result = exception_handler() { @delegate.each_sparse(&block) }
         class_invariant
         post_each_sparse()
 
@@ -413,7 +396,9 @@ class SparseMatrix
     def each(which = :all, &block)
         pre_each(which, &block)
         class_invariant
-        result = @matrix.each(which, &block)
+        
+        result = exception_handler() { @matrix.each(which, &block) }
+        
         class_invariant
         post_each()
 
@@ -426,7 +411,7 @@ class SparseMatrix
         pre_delegate_method(method_name)
         #We are checking in the delegate if we respond to this method.
         #See method_missing in matrixdelegate.rb
-        result = @delegate.send(method_name, *args, &block)
+        result = exception_handler{ @delegate.send(method_name, *args, &block) }
 
         if result.respond_to?("sparse?")
             if result.sparse?
@@ -437,6 +422,71 @@ class SparseMatrix
         post_delegate_method
 
         result
+    end
+    
+    def exception_handler(&block)
+      
+      begin
+        result = yield unless !block_given?
+      rescue NoMemoryError => no_mem
+      
+        raise
+      rescue NotImplementedError => not_impl
+      
+        raise
+      rescue Interrupt => interrupt
+      
+        raise
+      rescue SignalException => signal
+      
+        raise  
+      rescue ArgumentError => arg_err
+        
+        raise
+      rescue IndexError => index_err
+        
+        raise   
+      rescue SystemExit => sys_exit
+        
+        raise  
+      rescue LocalJumpError => lje
+          
+        raise
+      rescue KeyError => key_err
+        
+        raise
+      rescue NoMethodError => no_mthd_err
+        
+        raise
+      rescue NameError => name_err
+        
+        raise
+      rescue FloatDomainError => float_domain_err 
+        
+        raise  
+      rescue RangeError => range_err   
+      
+        raise
+      rescue RuntimeError => run_err
+        
+        raise
+      rescue SystemCallError  => sys_call_err
+        
+        raise
+      rescue TypeError => type_err
+        
+        raise
+      rescue ZeroDivisionError => zero_div_err  
+      
+        raise
+      rescue StandardError => std_err
+       
+        raise
+      rescue => unknown
+        raise
+      end
+      
+      result
     end
     
 

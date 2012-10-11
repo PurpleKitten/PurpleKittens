@@ -9,7 +9,7 @@ module SparseMatrixContracts
     @@override = false
     
     #CHANGE FOR SPEED, BUT INVARIANTS WILL NOT BE CHECKED
-    @@override_class_invariants = false
+    @@override_class_invariants = true
   
     @@pre_symbol = :pre
     @@post_symbol = :post
@@ -152,12 +152,18 @@ module SparseMatrixContracts
     end 
     
     def pre_access_ij_element(i,j)
+      assert( i.is_a?(Integer) && j.is_a?(Integer), "Indices must be integers.")
+      assert(i < @matrix.row_size || i >= 0, "i index must be greater than 0 and less than #{@matrix.row_size}")
+      assert(j < @matrix.column_size || j >= 0, "j index must be greater than 0 and less than #{@matrix.column_size}")
     end 
     def post_access_ij_element(result)
         assert(!result.nil?, NIL_RETURNED)
     end
     
     def pre_set_ijk_element(i,j)
+      assert( i.is_a?(Integer) && j.is_a?(Integer), "Indices must be integers.")
+      assert(i < @matrix.row_size || i >= 0, "i index must be greater than 0 and less than #{@matrix.row_size}")
+      assert(j < @matrix.column_size || j >= 0, "j index must be greater than 0 and less than #{@matrix.column_size}")
     end 
     def post_set_ijk_element(result)
         assert(!result.nil?, NIL_RETURNED)
