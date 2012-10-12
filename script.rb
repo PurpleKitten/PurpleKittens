@@ -28,7 +28,6 @@ puts (blah - 5.1).to_s
 puts (blah * 5.1).to_s
 puts (blah / 5.0).to_s
 
-abort("DEAD")
 #puts (blah + 5).to_s
 blah = SparseMatrix.new([[1.1,5.2,0],[6.3,7.6,8],[9.4,1.2,0]])
 puts (blah - blah).to_s

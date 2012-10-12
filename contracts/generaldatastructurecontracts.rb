@@ -125,8 +125,11 @@ module GeneralDataStructureContracts
         
         sum_original = 0
         self.to_a.each { |a| sum_original+=a.inject(:+) }  
-          
-        assert(sum_result.round(10) == sum_original.round(10))
+        
+        rounded_result = sum_result.round(10)
+        rounded_original = sum_original.round(10)
+        
+        assert(rounded_result == rounded_original)
         class_invariant
     end
 

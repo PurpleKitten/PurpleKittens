@@ -84,8 +84,10 @@ module MatrixDelegateContracts
     @matrix.each(:all){ |e| sumElementsPre1 += e }
     m.each(:all){ |e| sumElementsPre2 += e }
     result.each(:all){ |e| sumElementsPost += e }
-                  
-    assert((sumElementsPre1 + sumElementsPre2).round(10) == sumElementsPost.round(10), "Pre1 #{sumElementsPre1} + Pre2 #{sumElementsPre2} = Result: #{sumElementsPost}")
+    
+    combined_original_sum = (sumElementsPre1 + sumElementsPre2).round(10)
+    result_sum = sumElementsPost.round(10)
+    assert(combined_original_sum==result_sum , "Pre1 #{sumElementsPre1} + Pre2 #{sumElementsPre2} = Result: #{sumElementsPost}")
     
   end
   
@@ -101,8 +103,10 @@ module MatrixDelegateContracts
     @matrix.each(:all){ |e| sumElementsPre1 += e }
     m.each(:all){ |e| sumElementsPre2 += e }
     result.each(:all){ |e| sumElementsPost += e }
-                  
-    assert((sumElementsPre1 - sumElementsPre2).round(10) == sumElementsPost.round(10), "Pre1 #{sumElementsPre1} + Pre2 #{sumElementsPre2} = Result: #{sumElementsPost}")
+     
+    diffed_original = (sumElementsPre1 - sumElementsPre2).round(10)
+    result_sum = sumElementsPost.round(10)
+    assert(diffed_original==result_sum, "Pre1 #{sumElementsPre1} + Pre2 #{sumElementsPre2} = Result: #{sumElementsPost}")
   end
     
     def class_invariant

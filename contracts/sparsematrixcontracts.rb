@@ -94,11 +94,14 @@ module SparseMatrixContracts
         
         if m.respond_to?("plus")
           sumElementsPre1,sumElementsPre2,sumElementsPost = 0, 0, 0
-          @matrix.round(10).each(:all){ |e| sumElementsPre1 += e }
-          m.round(10).each(:all){ |e| sumElementsPre2 += e }
-          result.round(10).each(:all){ |e| sumElementsPost += e }
-                
-          assert((sumElementsPre1 + sumElementsPre2).round(10) == sumElementsPost.round(10), "Pre1 #{sumElementsPre1} + Pre2 #{sumElementsPre2} = Result: #{sumElementsPost}")
+          @matrix.each(:all){ |e| sumElementsPre1 += e }
+          m.each(:all){ |e| sumElementsPre2 += e }
+          result.each(:all){ |e| sumElementsPost += e }
+          
+          combined_original = (sumElementsPre1 + sumElementsPre2).round(10)
+          result_sum = sumElementsPost.round(10)
+                 
+          assert(combined_original==result_sum, "Pre1 #{sumElementsPre1} + Pre2 #{sumElementsPre2} = Result: #{sumElementsPost}")
         end
     end
     
@@ -121,8 +124,11 @@ module SparseMatrixContracts
           @matrix.each(:all){ |e| sumElementsPre1 += e }
           m.each(:all){ |e| sumElementsPre2 += e }
           result.each(:all){ |e| sumElementsPost += e }
-                          
-          assert((sumElementsPre1 - sumElementsPre2).round(10) == sumElementsPost.round(10), "Pre1 #{sumElementsPre1} - Pre2 #{sumElementsPre2} = Result: #{sumElementsPost}")
+          
+          original_difference = (sumElementsPre1 - sumElementsPre2).round(10)
+          result_sum = sumElementsPost.round(10)
+                            
+          assert(original_difference==result_sum, "Pre1 #{sumElementsPre1} - Pre2 #{sumElementsPre2} = Result: #{sumElementsPost}")
         end
     end  
     
@@ -215,8 +221,11 @@ module SparseMatrixContracts
     def post_inverse( result)
         identity = Matrix.identity(self.row_size())
         
-        assert((result * self).round(10) == identity, "Invalid Inverse detected")
-        assert((self * result).round(10)  == identity, "Invalid Inverse detected")
+        left = (result * self).round(10)
+        assert(left== identity, "Invalid Inverse detected")
+        
+        left = (self * result).round(10)
+        assert(left  == identity, "Invalid Inverse detected")
     end
     
     def pre_lower_triangular?()
@@ -329,7 +338,7 @@ module SparseMatrixContracts
         sumElementsPre,sumElementsPost = 0, 0
         @matrix.each(:all){ |e| sumElementsPre += e }
         result.each(:all){ |e| sumElementsPost += e }
-          
+         
         assert(sumElementsPre.round(10) == sumElementsPost.round(10), "Pre: #{sumElementsPre}, Post: #{sumElementsPost}")
     end
     
