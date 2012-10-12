@@ -48,6 +48,40 @@ module MatrixDelegate
         result
     end
 
+    def +(m)
+        pre_plus_sign(m)
+        class_invariant
+        
+        if(m.respond_to?("plus"))
+            pre_plus(m)
+            result = self.send("plus", m)
+            post_plus(m, result)
+        else
+            result = scalar_operation(){|x| x + m.to_f}      
+        end
+        
+        class_invariant
+        post_plus_sign(m, result)
+        result
+    end
+    
+    def -(m)
+        pre_minus_sign(m)
+        class_invariant
+        if(m.respond_to?("minus"))
+            pre_minus(m)
+            result = self.send("minus", m)
+            post_minus(m, result)
+        else
+          class_invariant
+            result = scalar_operation(){|x| x - m.to_f}      
+        end
+    
+        class_invariant
+        post_plus_sign(m, result)
+        result
+    end
+    
     private
     def scalar_operation(&block)
         pre_scalar_operation(&block)

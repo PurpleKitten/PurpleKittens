@@ -6,9 +6,4 @@ TODO
 -Exceptions
 -5+Matrix
 
-Changes:\
-
-i-2>=j
-
-Factory:
-pre_determine_delegate(rows, *parameters)
+Changes:

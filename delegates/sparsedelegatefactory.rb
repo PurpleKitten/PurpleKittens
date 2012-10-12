@@ -50,7 +50,7 @@ class SparseDelegateFactory
     def self.array_contains_arrayables(container)
         
       pre_array_contains_arrayables(container)
-      #assert container.to_a
+
       array = container.to_a
       
       contains_only_arrays = true
@@ -113,7 +113,7 @@ class SparseDelegateFactory
       def self.create_matrix(*rows, &block)     
             
             pre_create_matrix(rows)
-            #assert rows > 0
+
             args = rows[0]
             
             if (args.is_a?(Symbol))

@@ -13,7 +13,7 @@ module GeneralDataStructureContracts
         assert(rows[0] != nil, "Invalid parameters specified to initalize")
         assert(rows[0].respond_to?("[]"), "Rows doesn't respond to []")
         assert(rows[0].respond_to?("size"), "Rows doesn't respond to size")
-        assert(rows[0].size > 0, "Rows must not be empty!")
+        assert(rows[0].size > 0, "Sparse Matrices of size zero are not supported.")
 
         col_size = rows[0].size
 
@@ -126,7 +126,7 @@ module GeneralDataStructureContracts
         sum_original = 0
         self.to_a.each { |a| sum_original+=a.inject(:+) }  
           
-        assert(sum_result == sum_original)
+        assert(sum_result.round(10) == sum_original.round(10))
         class_invariant
     end
 

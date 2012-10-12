@@ -128,7 +128,7 @@ class TridiagonalDataStructure
         pre_to_s
         class_invariant
 
-        s = "#{self.to_a().to_s}"
+        s = "TridiagonalDataStructure#{self.to_a().to_s}"
 
         class_invariant
         post_to_s(s)
@@ -157,6 +157,11 @@ class TridiagonalDataStructure
     end
 
     def hash
+      pre_hash
+      
+      result = self.to_a.hash()
+      
+      post_hash(result)
     end
 
     def ==(other)

@@ -130,7 +130,7 @@ class GeneralDataStructure
         pre_to_s
         class_invariant()
 
-        s = "#{self.to_a}"
+        s = "GeneralDataStructure#{self.to_a}"
 
         class_invariant()
         post_to_s(s)
@@ -141,15 +141,19 @@ class GeneralDataStructure
         pre_hash
         class_invariant()
 
+        result = self.to_a.hash()
+        
         class_invariant()
         post_hash(result)
+        
+        result
     end
 
     def ==(other)
         pre_equals(other)
         class_invariant()
-        #temp implementation
-        result = self.to_a == other.to_a
+        
+        result = (self.to_a == other.to_a)
 
         class_invariant()
         post_equals(other) 

@@ -19,18 +19,6 @@ class GeneralMatrixDelegate
         GeneralMatrixDelegate
     end
 
-    def +(m)
-        pre_plus_sign(m)
-        if(m.respond_to?("plus"))
-            result = plus(m)
-        else
-            result = scalar_operation(){|x| x + m.to_f}      
-        end
-
-        post_plus_sign(m, result)
-        result
-    end
-
     def to_s
         pre_to_s
         result = "GeneralMatrixDelegate #{@matrix}"
@@ -42,7 +30,11 @@ class GeneralMatrixDelegate
     def hash
         pre_hash
 
+        result = self.to_a.hash
+        
         post_hash
+        
+        result
     end
     
     def each_sparse(&block)
@@ -56,9 +48,8 @@ class GeneralMatrixDelegate
     def ==(other)
         pre_equals?()
 
-        #temp impl
         if(other.respond_to?("to_a"))
-            result = @matrix.to_a == other.to_a
+            result = self.to_a == other.to_a
         else
             result = false
         end
@@ -67,18 +58,5 @@ class GeneralMatrixDelegate
 
         result
     end
-
-    private 
-    def plus(m)
-        pre_plus(m)
-
-        #temp
-        result = @matrix.send("+", m)
-
-        post_plus(m, result)
-
-        result
-    end
-
 
 end

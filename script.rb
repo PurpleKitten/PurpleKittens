@@ -4,21 +4,39 @@
 
 #delegate = GeneralMatrixDelegate.new();
  
- 
- 
+
 blah = SparseMatrix.new([[2,0,-1],[-3,0,2],[-2,-1,0]])
  
+puts (blah / 5.1).to_s
+
+
 puts blah.to_s
 puts (blah + blah).to_s
+puts (blah + 5.1).to_s
+puts (blah - blah).to_s
+puts (blah - 5.1).to_s
+puts (blah * 5.1).to_s
+
+blah = SparseMatrix.new([[3,5,0],[6,7,8],[9,1,0]])
+puts blah.to_s
+puts (blah + blah).to_s
+puts (blah + 5.1).to_s
+puts (blah - blah).to_s
+puts (blah - 5.1).to_s
+puts (blah * 5.1).to_s
+puts (blah / 5.0).to_s
+
+abort("DEAD")
 #puts (blah + 5).to_s
+blah = SparseMatrix.new([[1.1,5.2,0],[6.3,7.6,8],[9.4,1.2,0]])
 puts (blah - blah).to_s
 puts (blah * blah).to_s
 puts (blah ** 3).to_s
-puts (blah / blah).to_s
+#puts (blah / blah).to_s
 puts (blah == blah).to_s
 puts (blah === blah).to_s
 puts (blah[0,0]).to_s
-puts blah.inverse().to_s
+#puts blah.inverse().to_s
 puts blah.coerce(nil).to_s
 
 

@@ -9,7 +9,7 @@ module SparseMatrixContracts
     @@override = false
     
     #CHANGE FOR SPEED, BUT INVARIANTS WILL NOT BE CHECKED
-    @@override_class_invariants = true
+    @@override_class_invariants = false
   
     @@pre_symbol = :pre
     @@post_symbol = :post
@@ -94,11 +94,11 @@ module SparseMatrixContracts
         
         if m.respond_to?("plus")
           sumElementsPre1,sumElementsPre2,sumElementsPost = 0, 0, 0
-          @matrix.each(:all){ |e| sumElementsPre1 += e }
-          m.each(:all){ |e| sumElementsPre2 += e }
-          result.each(:all){ |e| sumElementsPost += e }
+          @matrix.round(10).each(:all){ |e| sumElementsPre1 += e }
+          m.round(10).each(:all){ |e| sumElementsPre2 += e }
+          result.round(10).each(:all){ |e| sumElementsPost += e }
                 
-          assert(sumElementsPre1 + sumElementsPre2 == sumElementsPost, "Pre1 #{sumElementsPre1} + Pre2 #{sumElementsPre2} = Result: #{sumElementsPost}")
+          assert((sumElementsPre1 + sumElementsPre2).round(10) == sumElementsPost.round(10), "Pre1 #{sumElementsPre1} + Pre2 #{sumElementsPre2} = Result: #{sumElementsPost}")
         end
     end
     
@@ -122,7 +122,7 @@ module SparseMatrixContracts
           m.each(:all){ |e| sumElementsPre2 += e }
           result.each(:all){ |e| sumElementsPost += e }
                           
-          assert(sumElementsPre1 - sumElementsPre2 == sumElementsPost, "Pre1 #{sumElementsPre1} - Pre2 #{sumElementsPre2} = Result: #{sumElementsPost}")
+          assert((sumElementsPre1 - sumElementsPre2).round(10) == sumElementsPost.round(10), "Pre1 #{sumElementsPre1} - Pre2 #{sumElementsPre2} = Result: #{sumElementsPost}")
         end
     end  
     
@@ -214,8 +214,9 @@ module SparseMatrixContracts
     end
     def post_inverse( result)
         identity = Matrix.identity(self.row_size())
-        assert(result * self == identity, "Invalid Inverse detected")
-        assert(self * result  == identity, "Invalid Inverse detected")
+        
+        assert((result * self).round(10) == identity, "Invalid Inverse detected")
+        assert((self * result).round(10)  == identity, "Invalid Inverse detected")
     end
     
     def pre_lower_triangular?()
@@ -255,13 +256,14 @@ module SparseMatrixContracts
     def post_regular?(result)
     end
       
-  def pre_round?()
-      assert(self.square?(), SELF_SQUARE)
+  def pre_round(digits)
+      assert(digits.respond_to?("to_i"))
+      assert(digits.to_i > 0)
   end
-  def post_round?( result)
+  def post_round( result)
       assert(!result.nil?, NIL_RETURNED)
       assert(result.row_size==self.row_size, "Matrix size should not have changed during rounding.")
-      assert(result.column_size==self.column, "Matrix size should not have changed during rounding.")
+      assert(result.column_size==self.column_size, "Matrix size should not have changed during rounding.")
   end
     
     def pre_row_size()
@@ -325,8 +327,8 @@ module SparseMatrixContracts
         assert(!result.nil?, NIL_RETURNED)
         
         sumElementsPre,sumElementsPost = 0, 0
-        @matrix.each(:all){ |e| sumElementsPre += e }
-        result.each(:all){ |e| sumElementsPost += e }
+        @matrix.round(10).each(:all){ |e| sumElementsPre += e }
+        result.round(10).each(:all){ |e| sumElementsPost += e }
           
         assert(sumElementsPre == sumElementsPost, "Pre: #{sumElementsPre}, Post: #{sumElementsPost}")
     end
@@ -372,6 +374,14 @@ module SparseMatrixContracts
     
     def post_each_sparse()
     end
+    
+    def pre_exception_handler(&block)
+      assert(block_given?)
+    end
+    
+    def post_exception_handler()
+      
+    end
 
     
     def class_invariant
@@ -386,6 +396,9 @@ module SparseMatrixContracts
       @matrix.column_size == @delegate.column_size
 
       @matrix == @delegate
+      
+      assert(@matrix.row_size > 0)
+      assert(@matrix.column_size > 0)
         
       side_length_1 = self.row_size
       side_length_2 = self.column_size
@@ -396,17 +409,21 @@ module SparseMatrixContracts
       smatrixB = SparseMatrix.new(:build, side_length_2,side_length_3) { rand(1..20) }
       smatrixC = SparseMatrix.new(:build, side_length_3,side_length_4) { rand(1..20) }
       
+      smatrixA = smatrixA.round(10)
+      smatrixB = smatrixB.round(10)
+      smatrixC = smatrixC.round(10)
+      
       #A(BC)=(AB)C
-      assert((smatrixA * smatrixB)  *  smatrixC == smatrixA * ( smatrixB * smatrixC), INVARIANT + "A(BC)=(AB)C") 
+      assert(((smatrixA * smatrixB)  *  smatrixC).round(10) == (smatrixA * ( smatrixB * smatrixC)).round(10), INVARIANT + "A(BC)=(AB)C") 
       
       #(AB)^T = B^T*A^T
-      assert((smatrixA * smatrixB).transpose() ==  smatrixB.transpose() * smatrixA.transpose(), INVARIANT + "(AB)^T = B^T*A^T")
+      assert((smatrixA * smatrixB).round(10).transpose() ==  (smatrixB.transpose() * smatrixA.transpose()).round(10), INVARIANT + "(AB)^T = B^T*A^T")
       
       #a(BC)=(aB)C
-      assert(side_length_3 * (smatrixB * smatrixC) == (side_length_3 * smatrixB) * smatrixC, INVARIANT + "a(BC)=(aB)C")
+      assert((side_length_3 * (smatrixB * smatrixC)).round(10) == ((side_length_3 * smatrixB) * smatrixC).round(10), INVARIANT + "a(BC)=(aB)C")
       
       #(AB)a=A(Ba)
-      assert((smatrixA * smatrixB)*side_length_3 == smatrixA * (smatrixB * side_length_3), INVARIANT + "(AB)a=A(Ba)")
+      assert(((smatrixA * smatrixB)*side_length_3).round(10) == (smatrixA * (smatrixB * side_length_3)).round(10), INVARIANT + "(AB)a=A(Ba)")
       
       #rank [A] = rank(A^T*A)= rank(A*A^T)
       rank1 = smatrixA.rank()
@@ -424,6 +441,10 @@ module SparseMatrixContracts
       smatrixB = SparseMatrix.new(:build, side_length_1,side_length_2) { rand(1..20) }
       smatrixC = SparseMatrix.new(:build, side_length_1,side_length_2) { rand(1..20) }
       
+      smatrixA = smatrixA
+      smatrixB = smatrixB
+      smatrixC = smatrixC
+        
       #A + B = B + A
       assert(smatrixA + smatrixB == smatrixB + smatrixA, INVARIANT + "A + B = B + A")
       
@@ -447,7 +468,7 @@ module SparseMatrixContracts
       
       if(self.square?)
         #(A+B)C=AC+BC
-        assert(((smatrixA + smatrixB) * smatrixC) == (smatrixA * smatrixC + smatrixB * smatrixC), INVARIANT + "(A+B)C=AC+BC")
+        assert(((smatrixA + smatrixB) * smatrixC).round(10) == (smatrixA * smatrixC + smatrixB * smatrixC).round(10), INVARIANT + "(A+B)C=AC+BC")
         
         #trace(A)=trace(A^T)
         assert(smatrixA.trace() == smatrixA.transpose().trace(), INVARIANT + "trace(A)=trace(A^T)")
@@ -456,26 +477,26 @@ module SparseMatrixContracts
         assert((smatrixA + smatrixB).trace() == smatrixA.trace() + smatrixB.trace(), INVARIANT + "trace(A+B)=trace(A) + trace(B)")
         
         #det(AB)=det(A)det(B)
-        assert((smatrixA * smatrixB).determinant() == smatrixA.determinant() * smatrixB.determinant(), INVARIANT + "det(AB)=det(A)det(B)")
+        assert((smatrixA * smatrixB).determinant().round(10) == (smatrixA.determinant() * smatrixB.determinant()).round(10), INVARIANT + "det(AB)=det(A)det(B)")
         
         if(self.regular?())
            
           #AA-1 = A-1A = I  
-          assert(smatrixA * smatrixA.inverse == smatrixI, INVARIANT + "AA-1 = A-1A = I")
-          assert(smatrixA.inverse * smatrixA == smatrixI, INVARIANT + "AA-1 = A-1A = I")
+          assert((smatrixA * smatrixA.inverse).round(10) == smatrixI, INVARIANT + "AA-1 = A-1A = I")
+          assert((smatrixA.inverse * smatrixA).round(10) == smatrixI, INVARIANT + "AA-1 = A-1A = I")
     
           #(A^-1)^-1  =  A
-          assert((smatrixA.inverse()).inverse() == smatrixA, INVARIANT + "(A^-1)^-1  =  A")
+          assert((smatrixA.inverse()).inverse().round(10) == smatrixA.round(10), INVARIANT + "(A^-1)^-1  =  A")
           
           #(A^T)^-1 =(A^-1)^T 
-          assert(smatrixA.transpose().inverse() == (smatrixA.inverse()).transpose(), INVARIANT + "(A^T)^-1 =(A^-1)^T ")
+          assert(smatrixA.transpose().inverse().round(10) == (smatrixA.inverse().round(10)).transpose(), INVARIANT + "(A^T)^-1 =(A^-1)^T ")
        
           if(smatrixB.regular?())
-            #(AB)^-1 =  B^-1A^-1         
-            assert((smatrixA * smatrixB).inverse() == smatrixB.inverse() * smatrixA.inverse(), INVARIANT + "(AB)^-1 =  B^-1A^-1")
+            #(AB)^-1 =  B^-1A^-1 
+            assert((smatrixA * smatrixB).inverse().round(10) == (smatrixB.inverse() * smatrixA.inverse()).round(10), INVARIANT + "(AB)^-1 =  B^-1A^-1")
           
             #A / B = A (/B)
-            assert(smatrixA / smatrixB = smatrixA * (smatrixB.inverse()), INVARIANT + "A \/ B = A (\/B)")
+            assert((smatrixA / smatrixB).round(10) == (smatrixA * (smatrixB.inverse())).round(10), INVARIANT + "A \/ B = A (\/B)")
           end 
           
         end     

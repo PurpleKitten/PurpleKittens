@@ -26,9 +26,9 @@ class SparseMatrix
 
     def *(m)
         pre_multiply(m)
-        #class_invariant
+        class_invariant
         result = delegate_method(__method__, m)
-        #class_invariant
+        class_invariant
         post_multiply(m, result)
 
         result
@@ -173,7 +173,7 @@ class SparseMatrix
     def round(ndigits=0)
         pre_round(ndigits)
         class_invariant
-        result = delegate_method(__method__)
+        result = delegate_method(__method__, ndigits.to_i)
         class_invariant
         post_round(result)
 
@@ -409,6 +409,7 @@ class SparseMatrix
     def delegate_method(method_name, *args, &block)
 
         pre_delegate_method(method_name)
+        class_invariant
         #We are checking in the delegate if we respond to this method.
         #See method_missing in matrixdelegate.rb
         result = exception_handler{ @delegate.send(method_name, *args, &block) }
@@ -418,14 +419,16 @@ class SparseMatrix
                 result = to_sparse_matrix(result)
             end
         end
-
+        
+        class_invariant
         post_delegate_method
 
         result
     end
     
     def exception_handler(&block)
-      
+      pre_exception_handler(&block)
+           
       begin
         result = yield unless !block_given?
       rescue NoMemoryError => no_mem
@@ -485,6 +488,8 @@ class SparseMatrix
       rescue => unknown
         raise
       end
+      
+      post_exception_handler
       
       result
     end

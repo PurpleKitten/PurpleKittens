@@ -51,8 +51,64 @@ module MatrixDelegateContracts
       class_invariant
     end
     
+  def pre_plus_sign(m)
+    assert(m.respond_to?("to_f") || m.respond_to?("plus"))
+  end
+  def post_plus_sign(m, result)
+    assert(!result.nil?, "Nil return detected")
+    assert(result.row_size==@matrix.row_size, "Matrix returned has invalid row dimension: Expected-#{@matrix.row_size}, Result: #{result.row_size}")
+    assert(result.column_size==@matrix.column_size, "Matrix returned has invalid column dimension: Expected-#{@matrix.column_size}, Result: #{result.column_size}")
+  end  
+  
+  def pre_minus_sign(m)
+    assert(m.respond_to?("to_f") || m.respond_to?("minus"))
+  end
+  def post_minus_sign(m, result)
+    post_plus_sign(m, result)
+  end
+  
+  def pre_plus(m)
+    assert(!m.nil?)
+    assert(m.respond_to?("row_size"))
+    assert(m.respond_to?("column_size"))
+    assert(m.respond_to?("[]"))
+    assert(@matrix.row_size == m.row_size)
+    assert(@matrix.column_size == m.column_size)
+  end
+  
+  def post_plus(m, result)    
+    assert(@matrix.row_size == result.row_size)
+    assert(@matrix.column_size == result.column_size)
+    
+    sumElementsPre1,sumElementsPre2,sumElementsPost = 0, 0, 0
+    @matrix.each(:all){ |e| sumElementsPre1 += e }
+    m.each(:all){ |e| sumElementsPre2 += e }
+    result.each(:all){ |e| sumElementsPost += e }
+                  
+    assert((sumElementsPre1 + sumElementsPre2).round(10) == sumElementsPost.round(10), "Pre1 #{sumElementsPre1} + Pre2 #{sumElementsPre2} = Result: #{sumElementsPost}")
+    
+  end
+  
+  def pre_minus(m)
+    pre_plus(m)
+  end
+  
+  def post_minus(m, result)    
+    assert(@matrix.row_size == result.row_size)
+    assert(@matrix.column_size == result.column_size)
+    
+    sumElementsPre1,sumElementsPre2,sumElementsPost = 0, 0, 0
+    @matrix.each(:all){ |e| sumElementsPre1 += e }
+    m.each(:all){ |e| sumElementsPre2 += e }
+    result.each(:all){ |e| sumElementsPost += e }
+                  
+    assert((sumElementsPre1 - sumElementsPre2).round(10) == sumElementsPost.round(10), "Pre1 #{sumElementsPre1} + Pre2 #{sumElementsPre2} = Result: #{sumElementsPost}")
+  end
+    
     def class_invariant
       @matrix.to_a == @matrixData.to_a
     end
+    
+    
     
 end

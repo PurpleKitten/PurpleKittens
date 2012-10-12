@@ -69,8 +69,10 @@ class TridiagonalMatrixDelegate
 
     def hash
         pre_hash
-
-        post_hash
+        result = self.to_a.hash
+        post_hash(result)
+        
+        result
     end
 
     def ==(other)
@@ -86,18 +88,6 @@ class TridiagonalMatrixDelegate
 
         result
     end
-
-    def -(m)
-        pre_minus_sign(m)
-        if(m.respond_to?("minus"))
-            result = minus(m)
-        else
-            result = scalar_operation(){|x| x - m.to_f}      
-        end
-
-        post_minus_sign(m, result)
-        result
-    end
     
     def each_sparse(&block)
       pre_each_sparse(&block)
@@ -105,18 +95,6 @@ class TridiagonalMatrixDelegate
       post_each_sparse()
       
       result
-    end
-
-    private 
-    def minus(m)
-        pre_minus(m)
-
-        #temp
-        result = @matrix.send("-", m)
-
-        post_minus(m, result)
-
-        result
     end
 
 end

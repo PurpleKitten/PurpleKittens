@@ -24,6 +24,15 @@ module TridiagonalDataStructureContracts
     end
 
 
+    def pre_hash
+      class_invariant
+      #None
+    end
+    def post_hash(result)
+      assert(!result.nil?,"Hash representation of class cannot be nil")
+      class_invariant
+    end
+    
     def pre_set_value(i,j,v)
         pre_square_bracket_equals(i,j,v)
         diff = j-i
