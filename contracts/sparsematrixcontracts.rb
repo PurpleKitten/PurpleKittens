@@ -9,7 +9,7 @@ module SparseMatrixContracts
     @@override = false
     
     #CHANGE FOR SPEED, BUT INVARIANTS WILL NOT BE CHECKED
-    @@override_class_invariants = false
+    @@override_class_invariants = true
   
     @@pre_symbol = :pre
     @@post_symbol = :post
@@ -529,8 +529,11 @@ module SparseMatrixContracts
        
           if(smatrixB.regular?())
             #(AB)^-1 =  B^-1A^-1 
-            left = (smatrixA * smatrixB).inverse().round(5)
-            right = (smatrixB.inverse() * smatrixA.inverse()).round(5)
+            
+            
+            left = (smatrixA * smatrixB).inverse().round(4)
+            right = (smatrixB.inverse() * smatrixA.inverse()).round(4)
+            
             assert(left == right, INVARIANT + "(AB)^-1 =  B^-1A^-1")
           
             #A / B = A (/B)

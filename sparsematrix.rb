@@ -271,7 +271,9 @@ class SparseMatrix
 
     def row_size()
         pre_row_size()
+        class_invariant
         result = delegate_method(__method__)
+        class_invariant
         post_row_size(result)
 
         result
@@ -279,7 +281,9 @@ class SparseMatrix
 
     def column_size()
         pre_column_size()
+        class_invariant
         result = delegate_method(__method__)
+        class_invariant
         post_column_size(result)
 
         result
@@ -327,7 +331,9 @@ class SparseMatrix
 
     def to_s()
         pre_to_s()
+        class_invariant
         result = "Sparse#{@matrix}"
+        class_invariant
         post_to_s(result)
 
         result
