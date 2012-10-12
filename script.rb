@@ -5,14 +5,16 @@
 #delegate = GeneralMatrixDelegate.new();
  
 
-blah = SparseMatrix.new([[2,0,-1],[-3,0,2],[-2,-1,0]])
- 
+blah = SparseMatrix.new([[2.1,0.3,-1.3],[-3.3,0.0,2.2],[-2.2,-1.4,0.0]])
+
+puts (blah + 5.155555).to_s
+  
 puts (blah / 5.1).to_s
 
 
 puts blah.to_s
 puts (blah + blah).to_s
-puts (blah + 5.1).to_s
+puts (blah + 5.155555).to_s
 puts (blah - blah).to_s
 puts (blah - 5.1).to_s
 puts (blah * 5.1).to_s

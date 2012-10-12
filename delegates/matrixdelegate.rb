@@ -57,7 +57,7 @@ module MatrixDelegate
             result = self.send("plus", m)
             post_plus(m, result)
         else
-            result = scalar_operation(){|x| x + m.to_f}      
+            result = scalar_operation(){|x| x + m}      
         end
         
         class_invariant
@@ -88,7 +88,7 @@ module MatrixDelegate
         result_matrix = self.to_a
         @matrixData.each_with_index do |row, i|
             row.each_with_index do |col, j|
-                result_matrix[i][j] = yield(col).to_i
+                result_matrix[i][j] = yield(col)
             end
         end
         result_matrix = SparseMatrix.new(result_matrix)

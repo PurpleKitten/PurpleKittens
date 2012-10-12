@@ -52,7 +52,7 @@ module MatrixDelegateContracts
     end
     
   def pre_plus_sign(m)
-    assert(m.respond_to?("to_f") || m.respond_to?("plus"))
+    assert(m.respond_to?("+") || m.respond_to?("plus"))
   end
   def post_plus_sign(m, result)
     assert(!result.nil?, "Nil return detected")
@@ -61,7 +61,7 @@ module MatrixDelegateContracts
   end  
   
   def pre_minus_sign(m)
-    assert(m.respond_to?("to_f") || m.respond_to?("minus"))
+    assert(m.respond_to?("-") || m.respond_to?("minus"))
   end
   def post_minus_sign(m, result)
     post_plus_sign(m, result)

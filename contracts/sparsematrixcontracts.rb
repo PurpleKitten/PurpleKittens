@@ -327,10 +327,10 @@ module SparseMatrixContracts
         assert(!result.nil?, NIL_RETURNED)
         
         sumElementsPre,sumElementsPost = 0, 0
-        @matrix.round(10).each(:all){ |e| sumElementsPre += e }
-        result.round(10).each(:all){ |e| sumElementsPost += e }
+        @matrix.each(:all){ |e| sumElementsPre += e }
+        result.each(:all){ |e| sumElementsPost += e }
           
-        assert(sumElementsPre == sumElementsPost, "Pre: #{sumElementsPre}, Post: #{sumElementsPost}")
+        assert(sumElementsPre.round(10) == sumElementsPost.round(10), "Pre: #{sumElementsPre}, Post: #{sumElementsPost}")
     end
     
     def pre_unitary?()
@@ -414,21 +414,29 @@ module SparseMatrixContracts
       smatrixC = smatrixC.round(10)
       
       #A(BC)=(AB)C
-      assert(((smatrixA * smatrixB)  *  smatrixC).round(10) == (smatrixA * ( smatrixB * smatrixC)).round(10), INVARIANT + "A(BC)=(AB)C") 
+      left = ((smatrixA * smatrixB)  *  smatrixC).round(10)
+      right = (smatrixA * ( smatrixB * smatrixC)).round(10)
+      assert(left == right, INVARIANT + "A(BC)=(AB)C") 
       
       #(AB)^T = B^T*A^T
-      assert((smatrixA * smatrixB).round(10).transpose() ==  (smatrixB.transpose() * smatrixA.transpose()).round(10), INVARIANT + "(AB)^T = B^T*A^T")
+      left = (smatrixA * smatrixB).transpose().round(10)
+      right = (smatrixB.transpose() * smatrixA.transpose()).round(10)
+      assert(left == right, INVARIANT + "(AB)^T = B^T*A^T")
       
       #a(BC)=(aB)C
-      assert((side_length_3 * (smatrixB * smatrixC)).round(10) == ((side_length_3 * smatrixB) * smatrixC).round(10), INVARIANT + "a(BC)=(aB)C")
+      left = (side_length_3 * (smatrixB * smatrixC)).round(10)
+      right = ((side_length_3 * smatrixB) * smatrixC).round(10)
+      assert(left==right , INVARIANT + "a(BC)=(aB)C")
       
       #(AB)a=A(Ba)
-      assert(((smatrixA * smatrixB)*side_length_3).round(10) == (smatrixA * (smatrixB * side_length_3)).round(10), INVARIANT + "(AB)a=A(Ba)")
+      left=((smatrixA * smatrixB)*side_length_3).round(10)
+      right = (smatrixA * (smatrixB * side_length_3)).round(10)
+      assert(left==right , INVARIANT + "(AB)a=A(Ba)")
       
       #rank [A] = rank(A^T*A)= rank(A*A^T)
-      rank1 = smatrixA.rank()
-      rank2 = (smatrixA.transpose()*smatrixA).rank()
-      rank3 = (smatrixA*smatrixA.transpose()).rank()
+      rank1 = smatrixA.rank().round(10)
+      rank2 = (smatrixA.transpose()*smatrixA).rank().round(10)
+      rank3 = (smatrixA*smatrixA.transpose()).rank().round(10)
       
       assert(rank1 == rank2, INVARIANT + "rank [A] = rank(A^T*A)= rank(A*A^T)")
       assert(rank2 == rank3, INVARIANT + "rank [A] = rank(A^T*A)= rank(A*A^T)")
@@ -446,10 +454,14 @@ module SparseMatrixContracts
       smatrixC = smatrixC
         
       #A + B = B + A
-      assert(smatrixA + smatrixB == smatrixB + smatrixA, INVARIANT + "A + B = B + A")
+      left = (smatrixA + smatrixB).round(10)
+      right = (smatrixB + smatrixA).round(10)
+      assert(left == right, INVARIANT + "A + B = B + A")
       
       #(A + B)T = AT + BT
-      assert((smatrixA + smatrixB).transpose() == smatrixA.transpose() + smatrixB.transpose(), INVARIANT + "(A + B)T = AT + BT")
+      left = ((smatrixA + smatrixB).transpose()).round(10)
+      right = (smatrixA.transpose() + smatrixB.transpose()).round(10)
+      assert(left==right , INVARIANT + "(A + B)T = AT + BT")
       
       #A-B = A + -B
       assert(smatrixA - smatrixB == smatrixA + (-1 * smatrixB), INVARIANT + "A-B = A + -B")
@@ -468,35 +480,54 @@ module SparseMatrixContracts
       
       if(self.square?)
         #(A+B)C=AC+BC
-        assert(((smatrixA + smatrixB) * smatrixC).round(10) == (smatrixA * smatrixC + smatrixB * smatrixC).round(10), INVARIANT + "(A+B)C=AC+BC")
+        left = ((smatrixA + smatrixB) * smatrixC).round(10)
+        right = (smatrixA * smatrixC + smatrixB * smatrixC).round(10)
+        assert(left==right , INVARIANT + "(A+B)C=AC+BC")
         
         #trace(A)=trace(A^T)
-        assert(smatrixA.trace() == smatrixA.transpose().trace(), INVARIANT + "trace(A)=trace(A^T)")
+        left = smatrixA.trace().round(5)
+        right = smatrixA.transpose().trace().round(5)
+        assert(left == right, INVARIANT + "trace(A)=trace(A^T)")
         
         #trace(A+B)=trace(A) + trace(B)
-        assert((smatrixA + smatrixB).trace() == smatrixA.trace() + smatrixB.trace(), INVARIANT + "trace(A+B)=trace(A) + trace(B)")
+        left = (smatrixA + smatrixB).trace().round(5)
+        right = (smatrixA.trace() + smatrixB.trace()).round(5)
+        assert(left==right, INVARIANT + "trace(A+B)=trace(A) + trace(B)")
         
         #det(AB)=det(A)det(B)
-        assert((smatrixA * smatrixB).determinant().round(10) == (smatrixA.determinant() * smatrixB.determinant()).round(10), INVARIANT + "det(AB)=det(A)det(B)")
+        left = (smatrixA * smatrixB).determinant().round(3)
+        right = (smatrixA.determinant() * smatrixB.determinant()).round(3)
+        assert(left==right, INVARIANT + "det(AB)=det(A)det(B)")
         
         if(self.regular?())
            
-          #AA-1 = A-1A = I  
-          assert((smatrixA * smatrixA.inverse).round(10) == smatrixI, INVARIANT + "AA-1 = A-1A = I")
-          assert((smatrixA.inverse * smatrixA).round(10) == smatrixI, INVARIANT + "AA-1 = A-1A = I")
+          #AA-1 = A-1A = I
+          left = (smatrixA * smatrixA.inverse).round(10)
+          assert(left== smatrixI, INVARIANT + "AA-1 = A-1A = I")
+          
+          left = (smatrixA.inverse * smatrixA).round(10)
+          assert(left == smatrixI, INVARIANT + "AA-1 = A-1A = I")
     
           #(A^-1)^-1  =  A
-          assert((smatrixA.inverse()).inverse().round(10) == smatrixA.round(10), INVARIANT + "(A^-1)^-1  =  A")
+          left = (smatrixA.inverse()).inverse().round(10)
+          right = smatrixA.round(10)
+          assert(left==right, INVARIANT + "(A^-1)^-1  =  A")
           
-          #(A^T)^-1 =(A^-1)^T 
-          assert(smatrixA.transpose().inverse().round(10) == (smatrixA.inverse().round(10)).transpose(), INVARIANT + "(A^T)^-1 =(A^-1)^T ")
+          #(A^T)^-1 =(A^-1)^T
+          left = smatrixA.transpose().inverse().round(10)
+          right = smatrixA.inverse().transpose().round(10)
+          assert(left==right, INVARIANT + "(A^T)^-1 =(A^-1)^T ")
        
           if(smatrixB.regular?())
             #(AB)^-1 =  B^-1A^-1 
-            assert((smatrixA * smatrixB).inverse().round(10) == (smatrixB.inverse() * smatrixA.inverse()).round(10), INVARIANT + "(AB)^-1 =  B^-1A^-1")
+            left = (smatrixA * smatrixB).inverse().round(5)
+            right = (smatrixB.inverse() * smatrixA.inverse()).round(5)
+            assert(left == right, INVARIANT + "(AB)^-1 =  B^-1A^-1")
           
             #A / B = A (/B)
-            assert((smatrixA / smatrixB).round(10) == (smatrixA * (smatrixB.inverse())).round(10), INVARIANT + "A \/ B = A (\/B)")
+            left = (smatrixA / smatrixB).round(10)
+            right = (smatrixA * (smatrixB.inverse())).round(10)
+            assert( left==right , INVARIANT + "A \/ B = A (\/B)")
           end 
           
         end     
