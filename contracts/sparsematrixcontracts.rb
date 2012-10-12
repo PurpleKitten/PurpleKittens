@@ -9,7 +9,7 @@ module SparseMatrixContracts
     @@override = false
     
     #CHANGE FOR SPEED, BUT INVARIANTS WILL NOT BE CHECKED
-    @@override_class_invariants = true
+    @@override_class_invariants = false
   
     @@pre_symbol = :pre
     @@post_symbol = :post

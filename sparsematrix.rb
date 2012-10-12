@@ -1,3 +1,4 @@
+require_relative 'matrix'
 require_relative 'matrix_mod'
 require_relative 'utils/matrixconvert'
 require_relative 'contracts/sparsematrixcontracts'

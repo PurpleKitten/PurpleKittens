@@ -37,7 +37,7 @@ class TridiagonalMatrixDelegate
             rows.each_with_index do |row,i|
               break unless isTridiag
               
-              if(!first_param.respond_to?("each_with_index"))
+              if(!row.respond_to?("each_with_index"))
                 return nil
               end 
               
