@@ -113,6 +113,17 @@ module MatrixDelegateContracts
       @matrix.to_a == @matrixData.to_a
     end
     
+  
+    def pre_set_value(i,j,v)
+        class_invariant
+        assert( i.is_a?(Integer) && j.is_a?(Integer), "Indices must be integers.")
+        assert(i < @matrix.row_size || i >= 0, "i index must be greater than 0 and less than #{@matrix.row_size}")
+        assert(j < @matrix.column_size || j >= 0, "j index must be greater than 0 and less than #{@matrix.column_size}")
+    end
+    def post_set_value(result)
+        assert(result.respond_to?("to_a"))
+        class_invariant
+    end
     
     
 end

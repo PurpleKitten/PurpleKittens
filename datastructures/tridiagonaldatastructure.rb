@@ -92,10 +92,10 @@ class TridiagonalDataStructure
     def []=(i,j,v)
         pre_set_value(i,j,v)
         class_invariant
-
+        
         arr, index = get_diagonal(i,j)
         arr[index]=v
-
+        
         class_invariant
         post_set_value(i,j,v)
     end

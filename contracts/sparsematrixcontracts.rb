@@ -171,8 +171,8 @@ module SparseMatrixContracts
       assert(i < @matrix.row_size || i >= 0, "i index must be greater than 0 and less than #{@matrix.row_size}")
       assert(j < @matrix.column_size || j >= 0, "j index must be greater than 0 and less than #{@matrix.column_size}")
     end 
-    def post_set_ijk_element(result)
-        assert(!result.nil?, NIL_RETURNED)
+    def post_set_ijk_element(i, j, k)
+        assert(self[i,j] == k)
     end
     
     def pre_coerce(m)
@@ -192,7 +192,6 @@ module SparseMatrixContracts
     def post_empty?(result)
     end
     
-    #TODO
     def pre_find_index(args)
         assert(args!=nil, NIL_PROVIDED)
         assert(args.size() >=0 && args.size() < 2, "Index")
@@ -397,8 +396,6 @@ module SparseMatrixContracts
       return if @@override
       return if @@override_class_invariants
       
-      #TODO Might need to caught exceptions because of this (when its true we aren't running pre/post conditions 
-      #- it would cause infinite recursion)
       @@override = true  
      
       @matrix.row_size == @delegate.row_size
@@ -457,10 +454,6 @@ module SparseMatrixContracts
       smatrixA = self
       smatrixB = SparseMatrix.new(:build, side_length_1,side_length_2) { rand(1..20) }
       smatrixC = SparseMatrix.new(:build, side_length_1,side_length_2) { rand(1..20) }
-      
-      smatrixA = smatrixA
-      smatrixB = smatrixB
-      smatrixC = smatrixC
         
       #A + B = B + A
       left = (smatrixA + smatrixB).round(10)

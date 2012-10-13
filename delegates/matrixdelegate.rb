@@ -65,6 +65,21 @@ module MatrixDelegate
         result
     end
     
+    def set_value(i,j,k)
+      pre_set_value(i,j,k)
+      class_invariant
+      
+      elements = self.to_a
+      elements[i][j] = k
+      result = elements
+      
+      class_invariant
+      post_set_value(result)
+      
+      result            
+    end
+      
+    
     def -(m)
         pre_minus_sign(m)
         class_invariant

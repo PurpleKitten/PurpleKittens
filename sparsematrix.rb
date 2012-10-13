@@ -113,11 +113,13 @@ class SparseMatrix
     def []=(i,j,k)
         pre_set_ijk_element(i,j)
         class_invariant
-        result = exception_handler() { @matrix.get_rows()[i,j]=k }
-        class_invariant
-        post_set_ijk_element(result)
-
-        result
+        
+        result = exception_handler() { @delegate.send("set_value", i, j, k) }
+          
+        initialize(result.to_a)
+        
+        post_set_ijk_element(i, j, k)
+        
     end
 
     def coerce(m)
@@ -436,7 +438,7 @@ class SparseMatrix
     def exception_handler(&block)
       pre_exception_handler(&block)
            
-      begin
+      begin        
         result = yield unless !block_given?
       rescue NoMemoryError => no_mem
       

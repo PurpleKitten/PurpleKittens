@@ -102,6 +102,7 @@ class GeneralDataStructure
 
         class_invariant()
         post_square_bracket_equals(i,j,v)
+
     end
 
     def fetch(index, default=nil)

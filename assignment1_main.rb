@@ -8,6 +8,22 @@
 #
 ## 
  
+blah = SparseMatrix.new(:identity, 5)
+puts blah
+
+puts blah[1,4]
+blah[0,0]=3
+blah[1,1]=3
+blah[2,2]=3
+blah[2,2]=3
+blah[3,3]=3
+blah[4,4]=3
+puts blah
+
+puts blah[1,4]
+blah[1,4]=3
+puts blah
+ 
 matrix = Matrix.build(3,3) { rand(1..20) }
 blah = SparseMatrix.new([[0,2,0],[4,0,2],[0,0,0]]) 
 

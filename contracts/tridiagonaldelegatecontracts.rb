@@ -50,7 +50,7 @@ module TridiagonalMatrixDelegateContracts
     def post_to_s(result)
       class_invariant
       assert(!result.nil?,"String representation of class cannot be nil")
-      assert(result.is_a?("String"),"to_s Must return a string")
+      assert(result.is_a?(String),"to_s Must return a string")
       assert(!result.empty?,"to_s Cannot be empty")
     end
     
