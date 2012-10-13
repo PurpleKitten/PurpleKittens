@@ -1,14 +1,32 @@
  require_relative 'sparsematrix'
 
 ##
-# Dustin Durand
-# 1203271
-#
-#
-#
+ # Dustin Durand
+ # 1203271
+ #
+ # x = SparseMatrix.new(:identity, 5)
+ # x = SparseMatrix.new(:build, 1, 2) { rand(1..20) }
+ # x = SparseMatrix.new(:diagonal, 1, 2, 3, 4, 6)
+ # x = SparseMatrix.new(:scalar, 3, 5)
+ # x = SparseMatrix.new([[0,2,0],[4,0,2],[0,0,0]])
+ # x = SparseMatrix.new([0,2,0],[4,0,2],[0,0,0])
+ #
+ # Note: When the class invariants for sparse matrix are turned on the library is really slow.
+ # There is an override in sparsematrixcontracts.rb
+ #
 ## 
+
+puts SparseMatrix.new(:identity, 5)
+puts SparseMatrix.new(:build, 1, 2) { rand(1..20) }
+puts SparseMatrix.new(:diagonal, 1, 2, 3, 4, 6)
+puts SparseMatrix.new(:scalar, 3, 5) 
+puts SparseMatrix.new([[0,2,0],[4,0,2],[0,0,0]])
+puts SparseMatrix.new([0,2,0],[4,0,2],[0,0,0])  
  
+
 blah = SparseMatrix.new(:identity, 5)
+puts (blah.map {|e| e+2}).to_s
+
 puts blah
 
 puts blah[1,4]
