@@ -523,9 +523,11 @@ module SparseMatrixContracts
           if(smatrixB.regular?())
             #(AB)^-1 =  B^-1A^-1 
             
+            left = (smatrixA * smatrixB).inverse()
+            right = (smatrixB.inverse() * smatrixA.inverse())
             
-            left = (smatrixA * smatrixB).inverse().round(4)
-            right = (smatrixB.inverse() * smatrixA.inverse()).round(4)
+            left = left.round(4).round(3).round(2)
+            right = right.round(4).round(3).round(2)
             
             assert(left == right, INVARIANT + "(AB)^-1 =  B^-1A^-1")
           

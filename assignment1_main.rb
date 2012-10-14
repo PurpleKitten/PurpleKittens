@@ -15,7 +15,7 @@
  # There is an override in sparsematrixcontracts.rb
  #
 ## 
-
+ 
 puts SparseMatrix.new(:identity, 5)
 puts SparseMatrix.new(:build, 1, 2) { rand(1..20) }
 puts SparseMatrix.new(:diagonal, 1, 2, 3, 4, 6)
@@ -23,6 +23,14 @@ puts SparseMatrix.new(:scalar, 3, 5)
 puts SparseMatrix.new([[0,2,0],[4,0,2],[0,0,0]])
 puts SparseMatrix.new([0,2,0],[4,0,2],[0,0,0])  
  
+invertible = SparseMatrix.new([1,3,1],[1,1,2],[2,3,4])  
+puts invertible
+puts invertible.square?()
+puts invertible.singular?()
+puts invertible.regular?()
+puts invertible.determinant()
+puts invertible.inverse()
+
 
 blah = SparseMatrix.new(:identity, 5)
 puts (blah.map {|e| e+2}).to_s
@@ -64,6 +72,7 @@ puts (blah - blah).to_s
 puts (blah - 5).to_s
 puts (blah * 5).to_s
 puts (blah / 5).to_s
+puts (blah * blah).to_s
 
 puts blah.transpose();
 puts blah.trace()
@@ -129,11 +138,12 @@ puts blah.unitary?()
 puts blah.upper_triangular?()
 
 
-blah = SparseMatrix.new([[2.1,0.3,-1.3],[-3.3,0.0,2.2],[-2.2,-1.4,0.0]])
-puts (blah + 5.155555).to_s
+blah = SparseMatrix.new([[2.5,0.3,-1.3],[-3.3,0.0,2.2],[-2.2,-1.4,0.0]])
+puts (blah + 5.5).to_s
 puts (blah / 5.5).to_s
 puts (blah + blah).to_s
 puts (blah + 5.5).to_s
 puts (blah - blah).to_s
-puts (blah - 5.1).to_s
-puts (blah * 5.1).to_s
+puts (blah - 5.5).to_s
+puts (blah * 5.5).to_s
+puts (blah * blah).to_s
